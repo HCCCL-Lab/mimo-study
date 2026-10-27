@@ -11,7 +11,7 @@ if (joinCode) sessionStorage.setItem(`mrngo-join:${studyId}`, joinCode);
 // Keep enrollment codes out of copied addresses and referrers after first use.
 if (location.hash) history.replaceState(null, '', location.pathname + location.search);
 const key = `mrngo-session:${studyId}`;
-let stored, state, study, practicing = false, practiceFeatures = [], busy = false;
+let stored, state, study, practicing = false, practiceFeatures = [], busy = false, lastRenderedTrial = null;
 try { stored = JSON.parse(localStorage.getItem(key) || 'null'); } catch { stored = null; }
 const persist = () => localStorage.setItem(key, JSON.stringify(stored));
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -79,9 +79,37 @@ function renderTrial() {
     app.innerHTML = `<section class="panel completion"><img class="mimo" src="./assets/mimo-frontal.png" alt="M.I.M.O."><h1>Köszönjük a részvételt!</h1><p>Mind a 10 fogalom magyarázatát sikeresen elmentettük.</p><p class="muted">Adatfelvétel: ${escape(state.studyName)}<br>Azonosító: ${escape(state.sessionId)}</p></section>`; return;
   }
   const current = state.current;
+  const trialKey = practicing ? 'practice' : current.id;
   const name = practicing ? (stored.gender === 'female' ? 'katica' : 'motor') : current.name;
   const responses = practicing ? practiceFeatures : [...current.features, ...stored.queue.filter(x => x.assignmentId === current.id && !current.features.some(f => f.id === x.id))];
-  app.innerHTML = `<section class="trial"><div class="progress" role="progressbar" aria-label="Elkészült fogalmak" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${state.completed}"><div style="width:${state.completed*10}%"></div></div><span class="progress-label">${practicing ? 'Gyakorlás' : `${state.completed} / 10`}</span><div class="prompt">Magyarázd el nekem, mi az, hogy…</div><h1 class="concept">${escape(name)}</h1><button class="help-button" aria-label="M.I.M.O. segítő kérdései"><img src="./assets/mimo-icon.png" alt=""></button><textarea class="entry" maxlength="2000" aria-label="Egy jellemző vagy magyarázat" placeholder="Írjon ide egy jellemzőt…"></textarea><button class="submit">Válasz beküldése</button><div class="responses" role="log" aria-label="Eddigi válaszok">${responses.map(f => `<p>${escape(f.text)}</p>`).join('')}</div><button class="next">${practicing ? 'Gyakorlás befejezése' : 'Fogalom befejezése'}</button><p class="error" role="alert"></p><span class="trial-note">${practicing ? 'A gyakorlóválaszokat nem használjuk az adatfelvételben.' : escape(state.studyName)}</span></section>`;
+  app.innerHTML = `<section class="trial">
+    <div class="trial-progress">
+      <div class="progress" role="progressbar" aria-label="Elkészült fogalmak" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${state.completed}"><div style="width:${state.completed*10}%"></div></div>
+      <span class="progress-label">${practicing ? 'Gyakorlás' : `${state.completed} / 10 fogalom`}</span>
+    </div>
+    <header class="trial-heading">
+      <div><p class="prompt">Magyarázd el nekem, mi az, hogy…</p><h1 class="concept">${escape(name)}</h1></div>
+      <button class="help-button" aria-label="M.I.M.O. segítő kérdései"><img src="./assets/mimo-icon.png" alt=""><span>Segítő kérdések</span></button>
+    </header>
+    <div class="trial-workspace">
+      <div class="composer">
+        <label class="field-label" for="feature-entry">Egy jellemző vagy magyarázat</label>
+        <textarea id="feature-entry" class="entry" maxlength="2000" placeholder="Írjon ide egy jellemzőt…"></textarea>
+        <button class="submit">Válasz beküldése</button>
+      </div>
+      <section class="response-panel" aria-labelledby="responses-title">
+        <div class="response-heading"><h2 id="responses-title">Eddigi válaszok</h2><span class="response-count">${responses.length} válasz</span></div>
+        <div class="responses" role="log" aria-label="Eddigi válaszok">${responses.length ? responses.map(f => `<p>${escape(f.text)}</p>`).join('') : '<p class="empty-responses">A beküldött jellemzők itt jelennek meg.</p>'}</div>
+      </section>
+    </div>
+    <p class="error" role="alert"></p>
+    <footer class="trial-footer">
+      <span class="trial-note">${practicing ? 'A gyakorlóválaszokat nem használjuk az adatfelvételben.' : escape(state.studyName)}</span>
+      <button class="next">${practicing ? 'Gyakorlás befejezése' : 'Fogalom befejezése'}</button>
+    </footer>
+  </section>`;
+  if (lastRenderedTrial !== trialKey) window.scrollTo({ top: 0, behavior: 'instant' });
+  lastRenderedTrial = trialKey;
   const entry = document.querySelector('.entry');
   entry.value = practicing ? '' : stored.draft || '';
   entry.oninput = () => { if (!practicing) { stored.draft = entry.value; persist(); } };
