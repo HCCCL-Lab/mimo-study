@@ -79,10 +79,10 @@ After Pages is available:
 node scripts/bootstrap-study.mjs
 ```
 
-The initial named study's private enrollment link is written to ignored `export/study-link.json`. Subsequent runs reuse that file. Additional study names can be created through `scripts/admin.mjs` with `MRNGO_ADMIN_TOKEN` in the terminal environment:
+The initial named study's private enrollment link is written to ignored `export/study-link.json`. Subsequent runs reuse that file. Additional study names can be created through `scripts/admin.mjs`. It reads `ADMIN_TOKEN` from the project's ignored `.dev.vars` file automatically; `MRNGO_ADMIN_TOKEN` in the terminal environment overrides that value. The output directory is created automatically, and existing output files are checked before contacting the server. On Windows PowerShell, use `npm.cmd` instead of `npm` for the commands below: the PowerShell npm wrapper can strip option names. Use `--consent-version`, avoiding npm's own `--version` option. Calling `node scripts/admin.mjs` directly also works:
 
 ```powershell
-npm run admin -- create-study --api https://mrngo-adult-api.mrngo-adult.workers.dev --name "Seminar Monday" --consent https://hcccl-lab.github.io/mimo-study/tajekoztato.html --version adult-v1 --site https://hcccl-lab.github.io/mimo-study/ --output export/monday-study-link.json
+npm run admin -- create-study --api https://mrngo-adult-api.mrngo-adult.workers.dev --name "Seminar Monday" --consent https://hcccl-lab.github.io/mimo-study/tajekoztato.html --consent-version adult-v1 --site https://hcccl-lab.github.io/mimo-study/ --output export/monday-study-link.json
 npm run admin -- stats --api https://mrngo-adult-api.mrngo-adult.workers.dev
 npm run admin -- abandon --api https://mrngo-adult-api.mrngo-adult.workers.dev --session SESSION_UUID
 npm run admin -- close-study --api https://mrngo-adult-api.mrngo-adult.workers.dev --study STUDY_UUID
