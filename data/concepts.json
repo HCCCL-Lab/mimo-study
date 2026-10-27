@@ -1,0 +1,2402 @@
+[
+  {
+    "id": "cat_01_a01",
+    "name": "béka",
+    "category": "cat_01",
+    "subcategory": "sc4",
+    "baseline_male": 7,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_01_a02",
+    "name": "rák",
+    "category": "cat_01",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_01_a03",
+    "name": "krokodil",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 3,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_01_a04",
+    "name": "teknős",
+    "category": "cat_01",
+    "subcategory": "sc16",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_01_a05",
+    "name": "kacsa",
+    "category": "cat_01",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_01_a06",
+    "name": "bagoly",
+    "category": "cat_01",
+    "subcategory": "sc4",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_01_a07",
+    "name": "csirke",
+    "category": "cat_01",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_01_a08",
+    "name": "galamb",
+    "category": "cat_01",
+    "subcategory": "sc17",
+    "baseline_male": 2,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_01_a09",
+    "name": "pingvin",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 6,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_01_a10",
+    "name": "tyúk",
+    "category": "cat_01",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_01_a11",
+    "name": "hattyú",
+    "category": "cat_01",
+    "subcategory": "sc2",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_01_a12",
+    "name": "hangya",
+    "category": "cat_01",
+    "subcategory": "sc18",
+    "baseline_male": 5,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_01_a13",
+    "name": "méhecske",
+    "category": "cat_01",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_01_a14",
+    "name": "pillangó",
+    "category": "cat_01",
+    "subcategory": "sc10",
+    "baseline_male": 3,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_01_a15",
+    "name": "pók",
+    "category": "cat_01",
+    "subcategory": "sc19",
+    "baseline_male": 6,
+    "baseline_female": 19
+  },
+  {
+    "id": "cat_01_a16",
+    "name": "kutya",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_01_a17",
+    "name": "majom",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_01_a18",
+    "name": "medve",
+    "category": "cat_01",
+    "subcategory": "sc4",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_01_a19",
+    "name": "ló",
+    "category": "cat_01",
+    "subcategory": "sc5",
+    "baseline_male": 6,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_01_a20",
+    "name": "zsiráf",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_01_a21",
+    "name": "elefánt",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 6,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_01_a22",
+    "name": "tigris",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 7,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_01_a23",
+    "name": "zebra",
+    "category": "cat_01",
+    "subcategory": "sc1",
+    "baseline_male": 4,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_01_a24",
+    "name": "oroszlán",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_01_a25",
+    "name": "kecske",
+    "category": "cat_01",
+    "subcategory": "sc5",
+    "baseline_male": 6,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_01_a26",
+    "name": "kígyó",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 5,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_01_a27",
+    "name": "gyík",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 4,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_01_a28",
+    "name": "egér",
+    "category": "cat_01",
+    "subcategory": "sc1",
+    "baseline_male": 6,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_01_a29",
+    "name": "mókus",
+    "category": "cat_01",
+    "subcategory": "sc4",
+    "baseline_male": 3,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_01_a30",
+    "name": "nyuszi",
+    "category": "cat_01",
+    "subcategory": "sc0",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_02_b01",
+    "name": "orr",
+    "category": "cat_02",
+    "subcategory": "sc0",
+    "baseline_male": 6,
+    "baseline_female": 20
+  },
+  {
+    "id": "cat_02_b02",
+    "name": "szem",
+    "category": "cat_02",
+    "subcategory": "sc0",
+    "baseline_male": 5,
+    "baseline_female": 24
+  },
+  {
+    "id": "cat_02_b03",
+    "name": "fül",
+    "category": "cat_02",
+    "subcategory": "sc0",
+    "baseline_male": 7,
+    "baseline_female": 19
+  },
+  {
+    "id": "cat_02_b04",
+    "name": "haj",
+    "category": "cat_02",
+    "subcategory": "sc7",
+    "baseline_male": 7,
+    "baseline_female": 26
+  },
+  {
+    "id": "cat_02_b05",
+    "name": "nyak",
+    "category": "cat_02",
+    "subcategory": "sc7",
+    "baseline_male": 7,
+    "baseline_female": 23
+  },
+  {
+    "id": "cat_02_b06",
+    "name": "fogsor",
+    "category": "cat_02",
+    "subcategory": "sc0",
+    "baseline_male": 8,
+    "baseline_female": 23
+  },
+  {
+    "id": "cat_02_b07",
+    "name": "száj",
+    "category": "cat_02",
+    "subcategory": "sc7",
+    "baseline_male": 7,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_02_b08",
+    "name": "arc",
+    "category": "cat_02",
+    "subcategory": "sc7",
+    "baseline_male": 9,
+    "baseline_female": 25
+  },
+  {
+    "id": "cat_02_b09",
+    "name": "szakáll",
+    "category": "cat_02",
+    "subcategory": "sc7",
+    "baseline_male": 6,
+    "baseline_female": 25
+  },
+  {
+    "id": "cat_02_b10",
+    "name": "kéz",
+    "category": "cat_02",
+    "subcategory": "sc10",
+    "baseline_male": 8,
+    "baseline_female": 23
+  },
+  {
+    "id": "cat_02_b11",
+    "name": "láb",
+    "category": "cat_02",
+    "subcategory": "sc10",
+    "baseline_male": 5,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_02_b12",
+    "name": "térd",
+    "category": "cat_02",
+    "subcategory": "sc10",
+    "baseline_male": 5,
+    "baseline_female": 24
+  },
+  {
+    "id": "cat_02_b13",
+    "name": "agy",
+    "category": "cat_02",
+    "subcategory": "sc0",
+    "baseline_male": 6,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_02_b14",
+    "name": "csont",
+    "category": "cat_02",
+    "subcategory": "sc0",
+    "baseline_male": 6,
+    "baseline_female": 24
+  },
+  {
+    "id": "cat_02_b15",
+    "name": "gerinc",
+    "category": "cat_02",
+    "subcategory": "sc0",
+    "baseline_male": 8,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_02_b16",
+    "name": "torok",
+    "category": "cat_02",
+    "subcategory": "sc3",
+    "baseline_male": 6,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_02_b17",
+    "name": "izom",
+    "category": "cat_02",
+    "subcategory": "sc0",
+    "baseline_male": 5,
+    "baseline_female": 23
+  },
+  {
+    "id": "cat_02_b18",
+    "name": "has",
+    "category": "cat_02",
+    "subcategory": "sc10",
+    "baseline_male": 7,
+    "baseline_female": 21
+  },
+  {
+    "id": "cat_02_b19",
+    "name": "váll",
+    "category": "cat_02",
+    "subcategory": "sc10",
+    "baseline_male": 7,
+    "baseline_female": 24
+  },
+  {
+    "id": "cat_02_b20",
+    "name": "mellkas",
+    "category": "cat_02",
+    "subcategory": "sc10",
+    "baseline_male": 7,
+    "baseline_female": 24
+  },
+  {
+    "id": "cat_03_c01",
+    "name": "kesztyű",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_03_c02",
+    "name": "nyaklánc",
+    "category": "cat_03",
+    "subcategory": "sc7",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_03_c03",
+    "name": "öv",
+    "category": "cat_03",
+    "subcategory": "sc1",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_03_c04",
+    "name": "kendő",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_03_c05",
+    "name": "szemüveg",
+    "category": "cat_03",
+    "subcategory": "sc7",
+    "baseline_male": 5,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_03_c06",
+    "name": "karkötő",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_03_c07",
+    "name": "nyakkendő",
+    "category": "cat_03",
+    "subcategory": "sc7",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_03_c08",
+    "name": "karóra",
+    "category": "cat_03",
+    "subcategory": "sc12",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_03_c09",
+    "name": "rúzs",
+    "category": "cat_03",
+    "subcategory": "sc7",
+    "baseline_male": 4,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_03_c10",
+    "name": "nadrág",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 4,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_03_c11",
+    "name": "szoknya",
+    "category": "cat_03",
+    "subcategory": "sc20",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_03_c12",
+    "name": "farmer",
+    "category": "cat_03",
+    "subcategory": "sc21",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_03_c13",
+    "name": "cipő",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_03_c14",
+    "name": "papucs",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 3,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_03_c15",
+    "name": "csizma",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_03_c16",
+    "name": "szandál",
+    "category": "cat_03",
+    "subcategory": "sc22",
+    "baseline_male": 4,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_03_c17",
+    "name": "harisnya",
+    "category": "cat_03",
+    "subcategory": "sc23",
+    "baseline_male": 5,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_03_c18",
+    "name": "zokni",
+    "category": "cat_03",
+    "subcategory": "sc24",
+    "baseline_male": 4,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_03_c19",
+    "name": "kalap",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 4,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_03_c20",
+    "name": "sapka",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_03_c21",
+    "name": "sál",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_03_c22",
+    "name": "sisak",
+    "category": "cat_03",
+    "subcategory": "sc4",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_03_c23",
+    "name": "pizsama",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 5,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_03_c24",
+    "name": "fürdőruha",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 6,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_03_c25",
+    "name": "öltöny",
+    "category": "cat_03",
+    "subcategory": "sc15",
+    "baseline_male": 3,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_03_c26",
+    "name": "köpeny",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 7,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_03_c27",
+    "name": "póló",
+    "category": "cat_03",
+    "subcategory": "sc25",
+    "baseline_male": 3,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_03_c28",
+    "name": "pulóver",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_03_c29",
+    "name": "ing",
+    "category": "cat_03",
+    "subcategory": "sc26",
+    "baseline_male": 5,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_03_c30",
+    "name": "kabát",
+    "category": "cat_03",
+    "subcategory": "sc8",
+    "baseline_male": 4,
+    "baseline_female": 20
+  },
+  {
+    "id": "cat_04_f01",
+    "name": "szendvics",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_04_f02",
+    "name": "pizza",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 2,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_04_f03",
+    "name": "kifli",
+    "category": "cat_04",
+    "subcategory": "sc27",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_04_f04",
+    "name": "perec",
+    "category": "cat_04",
+    "subcategory": "sc28",
+    "baseline_male": 4,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_04_f05",
+    "name": "tea",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_04_f06",
+    "name": "kakaó",
+    "category": "cat_04",
+    "subcategory": "sc29",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_04_f07",
+    "name": "üdítő",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_04_f08",
+    "name": "sajt",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_04_f09",
+    "name": "tej",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 6,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_04_f10",
+    "name": "vaj",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_04_f11",
+    "name": "tojás",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 2,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_04_f12",
+    "name": "alma",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 2,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_04_f13",
+    "name": "banán",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_04_f14",
+    "name": "szőlő",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_04_f15",
+    "name": "citrom",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 5,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_04_f16",
+    "name": "barack",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 5,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_04_f17",
+    "name": "eper",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_04_f18",
+    "name": "dinnye",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_04_f19",
+    "name": "sonka",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_04_f20",
+    "name": "szalámi",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_04_f21",
+    "name": "spagetti",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_04_f22",
+    "name": "fahéj",
+    "category": "cat_04",
+    "subcategory": "sc30",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_04_f23",
+    "name": "só",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_04_f24",
+    "name": "fagyi",
+    "category": "cat_04",
+    "subcategory": "sc31",
+    "baseline_male": 6,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_04_f25",
+    "name": "keksz",
+    "category": "cat_04",
+    "subcategory": "sc32",
+    "baseline_male": 6,
+    "baseline_female": 20
+  },
+  {
+    "id": "cat_04_f26",
+    "name": "méz",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_04_f27",
+    "name": "lekvár",
+    "category": "cat_04",
+    "subcategory": "sc11",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_04_f28",
+    "name": "csoki",
+    "category": "cat_04",
+    "subcategory": "sc33",
+    "baseline_male": 6,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_04_f29",
+    "name": "palacsinta",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 19
+  },
+  {
+    "id": "cat_04_f30",
+    "name": "torta",
+    "category": "cat_04",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_05_l01",
+    "name": "állatkert",
+    "category": "cat_05",
+    "subcategory": "sc0",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_05_l02",
+    "name": "játszótér",
+    "category": "cat_05",
+    "subcategory": "sc14",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_05_l03",
+    "name": "cirkusz",
+    "category": "cat_05",
+    "subcategory": "sc0",
+    "baseline_male": 3,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_05_l04",
+    "name": "uszoda",
+    "category": "cat_05",
+    "subcategory": "sc10",
+    "baseline_male": 3,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_05_l05",
+    "name": "medence",
+    "category": "cat_05",
+    "subcategory": "sc10",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l06",
+    "name": "étterem",
+    "category": "cat_05",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_05_l07",
+    "name": "áruház",
+    "category": "cat_05",
+    "subcategory": "sc15",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l08",
+    "name": "iskolaudvar",
+    "category": "cat_05",
+    "subcategory": "sc10",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_05_l09",
+    "name": "kastély",
+    "category": "cat_05",
+    "subcategory": "sc34",
+    "baseline_male": 4,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_05_l10",
+    "name": "város",
+    "category": "cat_05",
+    "subcategory": "sc14",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l11",
+    "name": "kert",
+    "category": "cat_05",
+    "subcategory": "sc35",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l12",
+    "name": "nappali",
+    "category": "cat_05",
+    "subcategory": "sc8",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_05_l13",
+    "name": "hálószoba",
+    "category": "cat_05",
+    "subcategory": "sc8",
+    "baseline_male": 4,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_05_l14",
+    "name": "ház",
+    "category": "cat_05",
+    "subcategory": "sc36",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_05_l15",
+    "name": "konyha",
+    "category": "cat_05",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_05_l16",
+    "name": "padlás",
+    "category": "cat_05",
+    "subcategory": "sc37",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l17",
+    "name": "fürdőszoba",
+    "category": "cat_05",
+    "subcategory": "sc38",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_05_l18",
+    "name": "lépcső",
+    "category": "cat_05",
+    "subcategory": "sc39",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l19",
+    "name": "pince",
+    "category": "cat_05",
+    "subcategory": "sc40",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l20",
+    "name": "ebédlő",
+    "category": "cat_05",
+    "subcategory": "sc3",
+    "baseline_male": 6,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_05_l21",
+    "name": "garázs",
+    "category": "cat_05",
+    "subcategory": "sc1",
+    "baseline_male": 4,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_05_l22",
+    "name": "erkély",
+    "category": "cat_05",
+    "subcategory": "sc41",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l23",
+    "name": "erdő",
+    "category": "cat_05",
+    "subcategory": "sc9",
+    "baseline_male": 5,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_05_l24",
+    "name": "park",
+    "category": "cat_05",
+    "subcategory": "sc9",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l25",
+    "name": "járda",
+    "category": "cat_05",
+    "subcategory": "sc1",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_05_l26",
+    "name": "mező",
+    "category": "cat_05",
+    "subcategory": "sc5",
+    "baseline_male": 6,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l27",
+    "name": "istálló",
+    "category": "cat_05",
+    "subcategory": "sc5",
+    "baseline_male": 5,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_05_l28",
+    "name": "kikötő",
+    "category": "cat_05",
+    "subcategory": "sc1",
+    "baseline_male": 6,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_05_l29",
+    "name": "dzsungel",
+    "category": "cat_05",
+    "subcategory": "sc0",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_05_l30",
+    "name": "kemping",
+    "category": "cat_05",
+    "subcategory": "sc0",
+    "baseline_male": 4,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_06_p01",
+    "name": "színész",
+    "category": "cat_06",
+    "subcategory": "sc2",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_06_p02",
+    "name": "költő",
+    "category": "cat_06",
+    "subcategory": "sc2",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p03",
+    "name": "szobrász",
+    "category": "cat_06",
+    "subcategory": "sc42",
+    "baseline_male": 1,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_06_p04",
+    "name": "bohóc",
+    "category": "cat_06",
+    "subcategory": "sc0",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_06_p05",
+    "name": "bűvész",
+    "category": "cat_06",
+    "subcategory": "sc0",
+    "baseline_male": 3,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_06_p06",
+    "name": "nagymama",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 4,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_06_p07",
+    "name": "nagypapa",
+    "category": "cat_06",
+    "subcategory": "sc43",
+    "baseline_male": 2,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p08",
+    "name": "menyasszony",
+    "category": "cat_06",
+    "subcategory": "sc15",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p09",
+    "name": "baba",
+    "category": "cat_06",
+    "subcategory": "sc8",
+    "baseline_male": 2,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p10",
+    "name": "barát",
+    "category": "cat_06",
+    "subcategory": "sc44",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p11",
+    "name": "fiú",
+    "category": "cat_06",
+    "subcategory": "sc45",
+    "baseline_male": 3,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_06_p12",
+    "name": "lány",
+    "category": "cat_06",
+    "subcategory": "sc46",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p13",
+    "name": "gyerek",
+    "category": "cat_06",
+    "subcategory": "sc14",
+    "baseline_male": 4,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_06_p14",
+    "name": "felnőtt",
+    "category": "cat_06",
+    "subcategory": "sc15",
+    "baseline_male": 3,
+    "baseline_female": 9
+  },
+  {
+    "id": "cat_06_p15",
+    "name": "énekes",
+    "category": "cat_06",
+    "subcategory": "sc2",
+    "baseline_male": 2,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p16",
+    "name": "balerina",
+    "category": "cat_06",
+    "subcategory": "sc2",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_06_p17",
+    "name": "orvos",
+    "category": "cat_06",
+    "subcategory": "sc1",
+    "baseline_male": 3,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p18",
+    "name": "tanár",
+    "category": "cat_06",
+    "subcategory": "sc2",
+    "baseline_male": 3,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_06_p19",
+    "name": "rendőr",
+    "category": "cat_06",
+    "subcategory": "sc1",
+    "baseline_male": 3,
+    "baseline_female": 9
+  },
+  {
+    "id": "cat_06_p20",
+    "name": "pék",
+    "category": "cat_06",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p21",
+    "name": "szakács",
+    "category": "cat_06",
+    "subcategory": "sc3",
+    "baseline_male": 2,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p22",
+    "name": "halász",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_06_p23",
+    "name": "postás",
+    "category": "cat_06",
+    "subcategory": "sc1",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p24",
+    "name": "tudós",
+    "category": "cat_06",
+    "subcategory": "sc2",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_06_p25",
+    "name": "űrhajós",
+    "category": "cat_06",
+    "subcategory": "sc1",
+    "baseline_male": 4,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_06_p26",
+    "name": "fodrász",
+    "category": "cat_06",
+    "subcategory": "sc47",
+    "baseline_male": 3,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p27",
+    "name": "katona",
+    "category": "cat_06",
+    "subcategory": "sc1",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_06_p28",
+    "name": "pilóta",
+    "category": "cat_06",
+    "subcategory": "sc1",
+    "baseline_male": 3,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_06_p29",
+    "name": "bajnok",
+    "category": "cat_06",
+    "subcategory": "sc10",
+    "baseline_male": 5,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p30",
+    "name": "focista",
+    "category": "cat_06",
+    "subcategory": "sc10",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_06_p31",
+    "name": "kalóz",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_06_p32",
+    "name": "tündér",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 5,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_06_p33",
+    "name": "angyal",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_06_p34",
+    "name": "boszorkány",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_06_p35",
+    "name": "hercegnő",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_06_p36",
+    "name": "király",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 3,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_06_p37",
+    "name": "sellő",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 2,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_06_p38",
+    "name": "varázsló",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_06_p39",
+    "name": "lovag",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 5,
+    "baseline_female": 9
+  },
+  {
+    "id": "cat_06_p40",
+    "name": "szellem",
+    "category": "cat_06",
+    "subcategory": "sc4",
+    "baseline_male": 4,
+    "baseline_female": 7
+  },
+  {
+    "id": "cat_07_pl01",
+    "name": "rizs",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_07_pl02",
+    "name": "búza",
+    "category": "cat_07",
+    "subcategory": "sc5",
+    "baseline_male": 3,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_07_pl03",
+    "name": "kukorica",
+    "category": "cat_07",
+    "subcategory": "sc5",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl04",
+    "name": "rózsa",
+    "category": "cat_07",
+    "subcategory": "sc48",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl05",
+    "name": "pitypang",
+    "category": "cat_07",
+    "subcategory": "sc49",
+    "baseline_male": 4,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_07_pl06",
+    "name": "napraforgó",
+    "category": "cat_07",
+    "subcategory": "sc50",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_07_pl07",
+    "name": "hóvirág",
+    "category": "cat_07",
+    "subcategory": "sc9",
+    "baseline_male": 8,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl08",
+    "name": "liliom",
+    "category": "cat_07",
+    "subcategory": "sc51",
+    "baseline_male": 3,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_07_pl09",
+    "name": "tulipán",
+    "category": "cat_07",
+    "subcategory": "sc52",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl10",
+    "name": "lóhere",
+    "category": "cat_07",
+    "subcategory": "sc53",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl11",
+    "name": "gomba",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_07_pl12",
+    "name": "kaktusz",
+    "category": "cat_07",
+    "subcategory": "sc11",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_07_pl13",
+    "name": "dió",
+    "category": "cat_07",
+    "subcategory": "sc9",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl14",
+    "name": "makk",
+    "category": "cat_07",
+    "subcategory": "sc54",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_07_pl15",
+    "name": "mogyoró",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_07_pl16",
+    "name": "toboz",
+    "category": "cat_07",
+    "subcategory": "sc9",
+    "baseline_male": 6,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_07_pl17",
+    "name": "bokor",
+    "category": "cat_07",
+    "subcategory": "sc9",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_07_pl18",
+    "name": "fenyőfa",
+    "category": "cat_07",
+    "subcategory": "sc9",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl19",
+    "name": "fűzfa",
+    "category": "cat_07",
+    "subcategory": "sc4",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl20",
+    "name": "tölgyfa",
+    "category": "cat_07",
+    "subcategory": "sc9",
+    "baseline_male": 4,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_07_pl21",
+    "name": "bükkfa",
+    "category": "cat_07",
+    "subcategory": "sc9",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_07_pl22",
+    "name": "krumpli",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_07_pl23",
+    "name": "paradicsom",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 5,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_07_pl24",
+    "name": "bab",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 6,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_07_pl25",
+    "name": "borsó",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_07_pl26",
+    "name": "hagyma",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 6,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_07_pl27",
+    "name": "káposzta",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_07_pl28",
+    "name": "uborka",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_07_pl29",
+    "name": "brokkoli",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_07_pl30",
+    "name": "sárgarépa",
+    "category": "cat_07",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_08_t01",
+    "name": "fogkefe",
+    "category": "cat_08",
+    "subcategory": "sc7",
+    "baseline_male": 3,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t02",
+    "name": "fürdőkád",
+    "category": "cat_08",
+    "subcategory": "sc55",
+    "baseline_male": 2,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_08_t03",
+    "name": "szappan",
+    "category": "cat_08",
+    "subcategory": "sc56",
+    "baseline_male": 5,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t04",
+    "name": "tükör",
+    "category": "cat_08",
+    "subcategory": "sc7",
+    "baseline_male": 3,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t05",
+    "name": "esernyő",
+    "category": "cat_08",
+    "subcategory": "sc8",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t06",
+    "name": "sátor",
+    "category": "cat_08",
+    "subcategory": "sc0",
+    "baseline_male": 4,
+    "baseline_female": 9
+  },
+  {
+    "id": "cat_08_t07",
+    "name": "horgászbot",
+    "category": "cat_08",
+    "subcategory": "sc57",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t08",
+    "name": "gyertya",
+    "category": "cat_08",
+    "subcategory": "sc58",
+    "baseline_male": 3,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_08_t09",
+    "name": "akvárium",
+    "category": "cat_08",
+    "subcategory": "sc0",
+    "baseline_male": 4,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t10",
+    "name": "függöny",
+    "category": "cat_08",
+    "subcategory": "sc8",
+    "baseline_male": 3,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t11",
+    "name": "horgony",
+    "category": "cat_08",
+    "subcategory": "sc1",
+    "baseline_male": 3,
+    "baseline_female": 6
+  },
+  {
+    "id": "cat_08_t12",
+    "name": "váza",
+    "category": "cat_08",
+    "subcategory": "sc59",
+    "baseline_male": 4,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_08_t13",
+    "name": "hajszárító",
+    "category": "cat_08",
+    "subcategory": "sc7",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t14",
+    "name": "mosógép",
+    "category": "cat_08",
+    "subcategory": "sc60",
+    "baseline_male": 1,
+    "baseline_female": 9
+  },
+  {
+    "id": "cat_08_t15",
+    "name": "számítógép",
+    "category": "cat_08",
+    "subcategory": "sc12",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t16",
+    "name": "zseblámpa",
+    "category": "cat_08",
+    "subcategory": "sc12",
+    "baseline_male": 2,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t17",
+    "name": "asztal",
+    "category": "cat_08",
+    "subcategory": "sc9",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t18",
+    "name": "szék",
+    "category": "cat_08",
+    "subcategory": "sc9",
+    "baseline_male": 1,
+    "baseline_female": 8
+  },
+  {
+    "id": "cat_08_t19",
+    "name": "szekrény",
+    "category": "cat_08",
+    "subcategory": "sc9",
+    "baseline_male": 4,
+    "baseline_female": 9
+  },
+  {
+    "id": "cat_08_t20",
+    "name": "szőnyeg",
+    "category": "cat_08",
+    "subcategory": "sc61",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t21",
+    "name": "fotel",
+    "category": "cat_08",
+    "subcategory": "sc8",
+    "baseline_male": 5,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_08_t22",
+    "name": "doboz",
+    "category": "cat_08",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t23",
+    "name": "létra",
+    "category": "cat_08",
+    "subcategory": "sc14",
+    "baseline_male": 4,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_08_t24",
+    "name": "seprű",
+    "category": "cat_08",
+    "subcategory": "sc62",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t25",
+    "name": "ásó",
+    "category": "cat_08",
+    "subcategory": "sc63",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t26",
+    "name": "gitár",
+    "category": "cat_08",
+    "subcategory": "sc2",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t27",
+    "name": "zongora",
+    "category": "cat_08",
+    "subcategory": "sc2",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t28",
+    "name": "xilofon",
+    "category": "cat_08",
+    "subcategory": "sc2",
+    "baseline_male": 3,
+    "baseline_female": 9
+  },
+  {
+    "id": "cat_08_t29",
+    "name": "trombita",
+    "category": "cat_08",
+    "subcategory": "sc64",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t30",
+    "name": "kanál",
+    "category": "cat_08",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t31",
+    "name": "sütő",
+    "category": "cat_08",
+    "subcategory": "sc3",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t32",
+    "name": "hűtő",
+    "category": "cat_08",
+    "subcategory": "sc13",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t33",
+    "name": "tányér",
+    "category": "cat_08",
+    "subcategory": "sc3",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_08_t34",
+    "name": "iskolatáska",
+    "category": "cat_08",
+    "subcategory": "sc65",
+    "baseline_male": 3,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t35",
+    "name": "iskolapad",
+    "category": "cat_08",
+    "subcategory": "sc66",
+    "baseline_male": 5,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t36",
+    "name": "tábla",
+    "category": "cat_08",
+    "subcategory": "sc67",
+    "baseline_male": 5,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t37",
+    "name": "párna",
+    "category": "cat_08",
+    "subcategory": "sc8",
+    "baseline_male": 2,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_08_t38",
+    "name": "takaró",
+    "category": "cat_08",
+    "subcategory": "sc8",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_08_t39",
+    "name": "ágy",
+    "category": "cat_08",
+    "subcategory": "sc8",
+    "baseline_male": 3,
+    "baseline_female": 11
+  },
+  {
+    "id": "cat_08_t40",
+    "name": "bölcső",
+    "category": "cat_08",
+    "subcategory": "sc8",
+    "baseline_male": 2,
+    "baseline_female": 10
+  },
+  {
+    "id": "cat_09_ty01",
+    "name": "kirakós",
+    "category": "cat_09",
+    "subcategory": "sc68",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_09_ty02",
+    "name": "kártya",
+    "category": "cat_09",
+    "subcategory": "sc12",
+    "baseline_male": 5,
+    "baseline_female": 20
+  },
+  {
+    "id": "cat_09_ty03",
+    "name": "üveggolyó",
+    "category": "cat_09",
+    "subcategory": "sc69",
+    "baseline_male": 5,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_09_ty04",
+    "name": "lego",
+    "category": "cat_09",
+    "subcategory": "sc70",
+    "baseline_male": 3,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_09_ty05",
+    "name": "gyurma",
+    "category": "cat_09",
+    "subcategory": "sc71",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_09_ty06",
+    "name": "zsírkréta",
+    "category": "cat_09",
+    "subcategory": "sc72",
+    "baseline_male": 4,
+    "baseline_female": 12
+  },
+  {
+    "id": "cat_09_ty07",
+    "name": "ceruza",
+    "category": "cat_09",
+    "subcategory": "sc73",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_09_ty08",
+    "name": "hóember",
+    "category": "cat_09",
+    "subcategory": "sc74",
+    "baseline_male": 5,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_09_ty09",
+    "name": "homokvár",
+    "category": "cat_09",
+    "subcategory": "sc14",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_09_ty10",
+    "name": "könyv",
+    "category": "cat_09",
+    "subcategory": "sc2",
+    "baseline_male": 3,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_09_ty11",
+    "name": "sárkány",
+    "category": "cat_09",
+    "subcategory": "sc4",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_09_ty12",
+    "name": "kard",
+    "category": "cat_09",
+    "subcategory": "sc4",
+    "baseline_male": 5,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_09_ty13",
+    "name": "varázspálca",
+    "category": "cat_09",
+    "subcategory": "sc4",
+    "baseline_male": 4,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_09_ty14",
+    "name": "lufi",
+    "category": "cat_09",
+    "subcategory": "sc0",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_09_ty15",
+    "name": "telefon",
+    "category": "cat_09",
+    "subcategory": "sc12",
+    "baseline_male": 4,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_09_ty16",
+    "name": "mágnes",
+    "category": "cat_09",
+    "subcategory": "sc13",
+    "baseline_male": 5,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_09_ty17",
+    "name": "távcső",
+    "category": "cat_09",
+    "subcategory": "sc75",
+    "baseline_male": 6,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_09_ty18",
+    "name": "tűzijáték",
+    "category": "cat_09",
+    "subcategory": "sc0",
+    "baseline_male": 6,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_09_ty19",
+    "name": "jégkorcsolya",
+    "category": "cat_09",
+    "subcategory": "sc76",
+    "baseline_male": 3,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_09_ty20",
+    "name": "gokart",
+    "category": "cat_09",
+    "subcategory": "sc77",
+    "baseline_male": 5,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_09_ty21",
+    "name": "mászóka",
+    "category": "cat_09",
+    "subcategory": "sc14",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_09_ty22",
+    "name": "libikóka",
+    "category": "cat_09",
+    "subcategory": "sc14",
+    "baseline_male": 4,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_09_ty23",
+    "name": "trambulin",
+    "category": "cat_09",
+    "subcategory": "sc14",
+    "baseline_male": 4,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_09_ty24",
+    "name": "babaház",
+    "category": "cat_09",
+    "subcategory": "sc8",
+    "baseline_male": 3,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_09_ty25",
+    "name": "robot",
+    "category": "cat_09",
+    "subcategory": "sc1",
+    "baseline_male": 5,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_09_ty26",
+    "name": "plüss",
+    "category": "cat_09",
+    "subcategory": "sc78",
+    "baseline_male": 3,
+    "baseline_female": 17
+  },
+  {
+    "id": "cat_09_ty27",
+    "name": "labda",
+    "category": "cat_09",
+    "subcategory": "sc10",
+    "baseline_male": 4,
+    "baseline_female": 13
+  },
+  {
+    "id": "cat_09_ty28",
+    "name": "frizbi",
+    "category": "cat_09",
+    "subcategory": "sc10",
+    "baseline_male": 6,
+    "baseline_female": 14
+  },
+  {
+    "id": "cat_09_ty29",
+    "name": "gördeszka",
+    "category": "cat_09",
+    "subcategory": "sc10",
+    "baseline_male": 6,
+    "baseline_female": 15
+  },
+  {
+    "id": "cat_09_ty30",
+    "name": "ugrókötél",
+    "category": "cat_09",
+    "subcategory": "sc10",
+    "baseline_male": 7,
+    "baseline_female": 16
+  },
+  {
+    "id": "cat_10_v01",
+    "name": "repülőgép",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 4,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_10_v02",
+    "name": "űrhajó",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 5,
+    "baseline_female": 21
+  },
+  {
+    "id": "cat_10_v03",
+    "name": "helikopter",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 7,
+    "baseline_female": 20
+  },
+  {
+    "id": "cat_10_v04",
+    "name": "vonat",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 8,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_10_v05",
+    "name": "villamos",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 6,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_10_v06",
+    "name": "szánkó",
+    "category": "cat_10",
+    "subcategory": "sc79",
+    "baseline_male": 7,
+    "baseline_female": 20
+  },
+  {
+    "id": "cat_10_v07",
+    "name": "hajó",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 7,
+    "baseline_female": 23
+  },
+  {
+    "id": "cat_10_v08",
+    "name": "csónak",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 6,
+    "baseline_female": 25
+  },
+  {
+    "id": "cat_10_v09",
+    "name": "kajak",
+    "category": "cat_10",
+    "subcategory": "sc10",
+    "baseline_male": 6,
+    "baseline_female": 23
+  },
+  {
+    "id": "cat_10_v10",
+    "name": "bicikli",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 7,
+    "baseline_female": 25
+  },
+  {
+    "id": "cat_10_v11",
+    "name": "tűzoltóautó",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 5,
+    "baseline_female": 22
+  },
+  {
+    "id": "cat_10_v12",
+    "name": "busz",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 7,
+    "baseline_female": 25
+  },
+  {
+    "id": "cat_10_v13",
+    "name": "autó",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 6,
+    "baseline_female": 18
+  },
+  {
+    "id": "cat_10_v14",
+    "name": "teherautó",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 6,
+    "baseline_female": 21
+  },
+  {
+    "id": "cat_10_v15",
+    "name": "traktor",
+    "category": "cat_10",
+    "subcategory": "sc5",
+    "baseline_male": 7,
+    "baseline_female": 25
+  },
+  {
+    "id": "cat_10_v16",
+    "name": "mentőautó",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 8,
+    "baseline_female": 21
+  },
+  {
+    "id": "cat_10_v17",
+    "name": "babakocsi",
+    "category": "cat_10",
+    "subcategory": "sc8",
+    "baseline_male": 6,
+    "baseline_female": 25
+  },
+  {
+    "id": "cat_10_v18",
+    "name": "taxi",
+    "category": "cat_10",
+    "subcategory": "sc1",
+    "baseline_male": 6,
+    "baseline_female": 25
+  },
+  {
+    "id": "cat_10_v19",
+    "name": "szekér",
+    "category": "cat_10",
+    "subcategory": "sc5",
+    "baseline_male": 6,
+    "baseline_female": 27
+  },
+  {
+    "id": "cat_10_v20",
+    "name": "markoló",
+    "category": "cat_10",
+    "subcategory": "sc5",
+    "baseline_male": 12,
+    "baseline_female": 26
+  }
+]

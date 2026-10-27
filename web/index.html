@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="description" content="M.I.M.O. – Fogalmak magyarázata, felnőtt kutatás">
+  <title>M.I.M.O. – Fogalmak magyarázata</title>
+  <link rel="icon" href="./assets/mimo-icon.png"><link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main id="app" aria-live="polite"></main>
+  <div id="network" role="status"></div>
+  <dialog id="help"><img src="./assets/mimo-questions.png" alt="M.I.M.O. segítő kérdései"><button id="close-help">Vissza</button></dialog>
+  <dialog id="confirm"><p>Szeretné beküldeni M.I.M.O.-nak a választ? Emlékezzen, az segít leginkább, ha legalább 10 különböző jellemző szerepel a leírásban.</p><div class="actions"><button id="edit">Nem, még szerkeszteném.</button><button id="finish">Igen, beküldöm így.</button></div></dialog>
+  <script src="./config.js"></script><script type="module" src="./app.js"></script>
+</body>
+</html>

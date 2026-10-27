@@ -1,0 +1,12 @@
+{
+  "name": "mrngo-adult", "version": "0.1.0", "private": true, "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/dev.mjs",
+    "worker:dev": "wrangler dev --ip 127.0.0.1 --port 8787",
+    "deploy:worker": "wrangler deploy",
+    "admin": "node scripts/admin.mjs"
+  },
+  "devDependencies": { "wrangler": "^4.0.0" }
+}
