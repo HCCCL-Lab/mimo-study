@@ -1,156 +1,129 @@
-const app = document.querySelector('#app');
-const network = document.querySelector('#network');
-const help = document.querySelector('#help');
-const confirm = document.querySelector('#confirm');
-const apiBase = window.MRNGO_CONFIG?.apiBase?.replace(/\/$/, '');
-const fragment = new URLSearchParams(location.hash.slice(1));
-const studyId = fragment.get('study') || sessionStorage.getItem('mrngo-study');
-if (studyId) sessionStorage.setItem('mrngo-study', studyId);
-const joinCode = fragment.get('join') || sessionStorage.getItem(`mrngo-join:${studyId}`);
-if (joinCode) sessionStorage.setItem(`mrngo-join:${studyId}`, joinCode);
-// Keep enrollment codes out of copied addresses and referrers after first use.
-if (location.hash) history.replaceState(null, '', location.pathname + location.search);
-const key = `mrngo-session:${studyId}`;
-let stored, state, study, practicing = false, practiceFeatures = [], busy = false, lastRenderedTrial = null;
-try { stored = JSON.parse(localStorage.getItem(key) || 'null'); } catch { stored = null; }
-const persist = () => localStorage.setItem(key, JSON.stringify(stored));
-const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function message(error) { const el = document.querySelector('.error'); if (el) el.textContent = error.message || String(error); }
-async function api(path, body = {}, authenticated = true) {
-  const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 20000);
-  try {
-    const result = await fetch(`${apiBase}${path}`, { method: 'POST', signal: controller.signal,
-      headers: { 'Content-Type': 'application/json', ...(authenticated && stored ? { Authorization: `Bearer ${stored.token}` } : {}) }, body: JSON.stringify(body) });
-    const data = await result.json();
-    if (!result.ok) throw Object.assign(new Error(data.error || 'A mentés nem sikerült. Próbálja újra.'), { status: result.status });
-    return data;
-  } catch (e) {
-    if (e instanceof TypeError || e.name === 'AbortError') throw new Error('Nem érhető el a szerver. A válasz ezen az eszközön megmaradt; csatlakozás után próbálja újra.');
-    throw e;
-  } finally { clearTimeout(timer); }
+const app=document.querySelector('#app'), network=document.querySelector('#network');
+const help=document.querySelector('#help'), confirm=document.querySelector('#confirm');
+const apiBase=window.MRNGO_CONFIG?.apiBase?.replace(/\/$/,'');
+const fragment=new URLSearchParams(location.hash.slice(1));
+const route=fragment.get('study')?{studyId:fragment.get('study'),joinCode:fragment.get('join')}:{};
+const completedMessage='Te már résztvettél ebben a kísérletben. Nagyon köszönjük a segítséget!';
+let study,auth,state,neptun='',consented=false,busy=false,practiceFeatures=[],pendingFeature=null,lastTrial=null,opening=0;
+// Remove only this application's legacy saved state. No browser storage is written.
+try{for(const storage of [localStorage,sessionStorage])for(const key of Object.keys(storage))if(key.startsWith('mrngo-'))storage.removeItem(key);}catch{}
+const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const token=()=>Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('');
+function view(kind){document.body.className=kind;window.scrollTo({top:0,behavior:'instant'});}
+function message(error){if(error.name==='StaleOpening')return;const el=document.querySelector('.error');if(el)el.textContent=error.message||String(error);}
+async function api(path,body={},authenticated=true){
+  const requestOpening=opening;
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),20000);
+  try{
+    const response=await fetch(apiBase+path,{method:'POST',cache:'no-store',signal:controller.signal,headers:{'Content-Type':'application/json',...(authenticated&&auth?{Authorization:'Bearer '+auth.token}:{})},body:JSON.stringify(body)});
+    const data=await response.json();if(requestOpening!==opening)throw Object.assign(new Error('Korábbi megnyitás.'),{name:'StaleOpening'});if(!response.ok)throw Object.assign(new Error(data.error||'A mentés nem sikerült. Próbálja újra.'),{status:response.status});return data;
+  }catch(error){
+    if(requestOpening!==opening)throw Object.assign(new Error('Korábbi megnyitás.'),{name:'StaleOpening'});
+    if(error instanceof TypeError||error.name==='AbortError')throw new Error('Nem érhető el a szerver. Kérjük, próbálja újra. A még nem visszaigazolt válasz mentéséig ne zárja be ezt az oldalt.');
+    throw error;
+  }finally{clearTimeout(timer);}
 }
-async function action(fn) {
-  if (busy) return;
-  busy = true;
-  document.querySelectorAll('button').forEach(b => b.disabled = true);
-  try { await fn(); } catch (e) { message(e); network.textContent = 'A művelet nem fejeződött be. Próbálja újra.'; }
-  finally { busy = false; document.querySelectorAll('button').forEach(b => b.disabled = false); }
+async function action(fn){
+  if(busy)return;const actionOpening=opening;busy=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);
+  try{await fn();}catch(error){
+    if(actionOpening!==opening||error.name==='StaleOpening')return;
+    if(error.status===401){auth=null;state=null;neptunScreen('A részvételt egy másik megnyitásban folytatta, vagy a kutató törölte. Kérjük, adja meg újra a Neptun-kódot.');}
+    else{message(error);if(document.querySelector('#demography-frame'))document.querySelector('#demography-frame').contentWindow.postMessage({type:'demographics-error',message:error.message},location.origin);}
+  }finally{if(actionOpening===opening){busy=false;document.querySelectorAll('button').forEach(b=>b.disabled=b.dataset.locked==='true');if(confirm.open)document.querySelector('#edit').focus();}}
 }
-document.querySelector('#close-help').onclick = () => help.close();
-document.querySelector('#edit').onclick = () => confirm.close();
-document.querySelector('#finish').onclick = () => action(async () => {
-  confirm.close();
-  if (practicing) { practicing = false; stored.practiceDone = true; persist(); renderTrial(); return; }
-  await flush();
-  state = await api('/complete', { assignmentId: state.current.id });
-  stored.draft = ''; persist(); network.textContent = 'Minden beküldött válasz mentve.'; renderTrial();
-});
-function introduction() {
-  app.innerHTML = `<section class="panel"><img class="mimo" src="./assets/mimo-frontal.png" alt="M.I.M.O."><h1>Fogalmak magyarázata</h1><p>A M.I.M.O. (Mesterséges Intelligencia a Magyarázatok Oktatásához) egy mesterséges intelligencia, amelynek célja, hogy emberi módon tudjon magyarázni, tanítani. Ehhez emberi gondolkodásmintákra és példákra van szüksége.</p><p>Minden bemutatott fogalomhoz kérjük, soroljon fel legalább 10 jellemzőt, amelyek Ön szerint kifejezik vagy leírják azt a fogalmat. Ha nincs ötlete, M.I.M.O. fejére bökve megnézheti segítő kérdéseit. Lehetősége van 10-nél több jellemzőt is felsorolni. Kérjük próbáljon értelmes mondatokban, felsorolásszerűen fogalmazni, ügyeljen a központozásra és az ékezetek használatára!</p><p>Összesen <strong>10 fogalom</strong> magyarázatára kérjük, egy rövid gyakorlás után. A feladat körülbelül 20–30 percet vesz igénybe. Minden beküldött válaszát azonnal mentjük; ezen a böngészőn később is folytathatja.</p><p class="muted">Adatfelvétel: ${escape(study.name)}</p><button id="begin">Folytatás</button><p class="error" role="alert"></p></section>`;
-  document.querySelector('#begin').onclick = demographics;
+function scene(text,label,next,withMimo=false){
+  view('scene');app.innerHTML=`<section class="scene-screen"><div class="scene-content">${withMimo?'<img class="scene-mimo" src="./assets/mimo-frontal.png" alt="M.I.M.O.">':''}${text.split('\n\n').map(p=>`<p>${escape(p).replaceAll('\n','<br>')}</p>`).join('')}<button id="scene-next">${escape(label)}</button><p class="error" role="alert"></p></div></section>`;
+  document.querySelector('#scene-next').onclick=()=>action(next);
 }
-function demographics() {
-  app.innerHTML = `<section class="panel"><h1>Demográfia</h1><p>Köszönjük, hogy részt vesz kutatásunkban! Kérjük, válaszoljon a lenti kérdésekre.</p><form id="demographics"><label>Neptun-kód<input name="neptun" required minlength="5" maxlength="6" pattern="(?:[A-Za-z0-9]{6}|[Tt][Ee][Ss][Zz][Tt])" autocomplete="off" autocapitalize="characters"></label><div class="two-col"><label>Életkor<input name="age" type="number" required min="18" max="110"></label><label>Nem<select name="gender" required><option value="">Válasszon…</option><option value="female">Nő</option><option value="male">Férfi</option><option value="other">Egyéb</option><option value="undisclosed">Nem kívánok válaszolni</option></select></label></div><label>Hány évet töltött oktatásban (általános iskolától ezidáig)?<input name="schooling" type="number" min="0" max="50" required></label><label>Magyar anyanyelvű?<select name="hungarian" required><option value="">Válasszon…</option><option value="native">Igen – az első nyelvem</option><option value="second">Nem – második nyelvem</option><option value="no">Nem</option></select></label><label>Rendelkezik-e SNI diagnózissal?<select name="sni" required><option value="">Válasszon…</option><option value="yes">Igen</option><option value="no">Nem</option></select></label><p><a href="${escape(study.consentUrl)}" target="_blank" rel="noopener noreferrer">Kutatási tájékoztató, adatkezelés és beleegyező nyilatkozat</a></p><label class="check"><input name="consent" type="checkbox" required>Elolvastam a tájékoztatót, betöltöttem a 18. életévemet, és önként hozzájárulok a részvételhez.</label><button type="submit">Gyakorlás indítása</button><p class="error" role="alert"></p></form></section>`;
-  document.querySelector('form').onsubmit = e => { e.preventDefault(); action(async () => {
-    const d = Object.fromEntries(new FormData(e.target));
-    if (!stored) {
-      stored = { token: Array.from(crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2,'0')).join(''), sessionId: crypto.randomUUID(), queue: [], draft: '' };
-      persist(); // Credential exists before the first network request, including lost acknowledgments.
-    }
-    stored.enrollment = { studyId, joinCode, sessionId: stored.sessionId, token: stored.token,
-      neptun: d.neptun.toUpperCase(), demographics: { gender: d.gender, age: +d.age, schooling: +d.schooling, hungarian: d.hungarian, sni: d.sni }, consent: true, consentVersion: study.consentVersion };
-    persist();
-    state = await api('/sessions', stored.enrollment, false);
-    stored.gender = d.gender; stored.isTest = d.neptun.toUpperCase() === 'TESZT'; delete stored.enrollment; persist(); practicing = true; renderTrial();
-  }); };
+function neptunScreen(error=''){
+  auth=null;state=null;neptun='';consented=false;practiceFeatures=[];pendingFeature=null;lastTrial=null;
+  view('entry');confirm.close();help.close();network.textContent='';
+  app.innerHTML=`<section class="panel entry-panel"><img class="mimo" src="./assets/mimo-frontal.png" alt="M.I.M.O."><h1>Fogalmak magyarázata</h1><form id="neptun-form" autocomplete="off"><label for="neptun">Kérjük, adja meg a Neptun-kódját.</label><input id="neptun" name="neptun" autocomplete="off" autocapitalize="characters" spellcheck="false" required minlength="5" maxlength="6" pattern="(?:[A-Za-z0-9]{6}|[Tt][Ee][Ss][Zz][Tt])"><p class="muted">Ha már megkezdte a kísérletet, ugyanazzal a kóddal folytathatja.</p><button type="submit">Folytatás</button><p class="error" role="alert">${escape(error)}</p></form></section>`;
+  document.querySelector('form').onsubmit=e=>{e.preventDefault();action(async()=>{
+    neptun=new FormData(e.target).get('neptun').trim().toUpperCase();auth={token:token(),sessionId:crypto.randomUUID()};
+    const result=await api('/participants/enter',{...route,neptun,token:auth.token},false);
+    if(result.status==='completed'){auth=null;renderCompleted();return;}
+    if(result.status==='resume'){state=result.state;renderStage();return;}
+    study=result.study;consented=false;welcome();
+  });};
 }
-async function flush() {
-  while (stored.queue.length) {
-    network.textContent = 'Válasz mentése…';
-    const pending = stored.queue[0];
-    await api('/features', pending);
-    if (state?.current?.id === pending.assignmentId && !state.current.features.some(f => f.id === pending.id)) state.current.features.push({id:pending.id,text:pending.text});
-    stored.queue.shift(); persist();
+function renderCompleted(){view('scene');network.textContent='';app.innerHTML=`<section class="scene-screen"><div class="scene-content completion"><p>${completedMessage}</p></div></section>`;}
+function welcome(){scene('Kedves Résztvevő!\nKöszönjük, hogy részt vesz kutatásunkban! A kísérlet során fogalmak magyarázatára fogjuk kérni. Ez 20–30 percet vesz igénybe, a részvétel önkéntes és bármikor megszakítható.\nA részvétel feltétele a magyar anyanyelv, normál pszichiátriai és neurológiai státusz.\nEgy tájékoztató és beleegyező nyilatkozatot fog látni a gombra kattintva, miután elolvasta, a lenti gomb megnyomásával továbbléphet.','Tájékoztató és beleegyező',async()=>consentDocument());}
+function consentDocument(){
+  view('document-view');const supplied=new URL(study.consentUrl,location.href);const src=supplied.origin===location.origin?supplied.href:'./tajekoztato.html';
+  app.innerHTML=`<section class="document-screen"><iframe id="consent-frame" title="Tájékoztató és beleegyező nyilatkozat" src="${escape(src)}"></iframe><p class="error" role="alert"></p></section>`;
+}
+function demographicIntro(){scene('Elsőként kérlek válaszolj néhány demográfiai kérdésre.','Következő',async()=>demographics());}
+function demographics(){view('demographics-view');app.innerHTML='<section class="demography-screen"><iframe id="demography-frame" title="Demográfia" src="./form_demo.html"></iframe><p class="error" role="alert"></p></section>';}
+async function advance(stage){state=await api('/stage',{stage});renderStage();}
+function renderStage(){
+  if(state.done){renderCompleted();return;}
+  switch(state.stage){
+    case 'instruction':scene('A M.I.M.O. (Mesterséges Intelligencia a Magyarázatok Oktatásához) egy mesterséges intelligencia, amelynek célja, hogy emberi módon tudjon magyarázni, tanítani. Hogy ezt megtanulhassa, emberi gondolkodásmintákra és példákra van szüksége. Kísérletünkben arra kérjük, segítsen M.I.M.O.-nak, hogy jobban megértse, milyen jellemzőkkel írnak le egy-egy fogalmat az emberek.\n\nMinden bemutatott fogalomhoz kérjük, soroljon fel legalább 10 jellemzőt, amelyek Ön szerint kifejezik vagy leírják azt a fogalmat. Ha nincs ötlete, M.I.M.O. fejére bökve megnézheti segítő kérdéseit. Lehetősége van 10-nél több jellemzőt is felsorolni. Kérjük próbáljon értelmes mondatokban, felsorolásszerűen fogalmazni, ügyeljen a központozásra és az ékezetek használatára!\n\nÖsszesen 10 fogalom magyarázatára kérjük. Minden beküldött választ azonnal mentünk. Ha később ugyanazzal a Neptun-kóddal megnyitja a kísérletet, folytathatja a megkezdett részvételt.\n\nNincs helyes vagy helytelen válasz – a lényeg az, hogy M.I.M.O. megismerje, mit jelentenek a fogalmak. Kérjük kattintson a lenti gombra a folytatáshoz.','Folytatás',()=>advance('tutorial-intro'));break;
+    case 'tutorial-intro':scene('Elsőként egy rövid videót fog látni arról, hogyan működik a feladat, kérjük figyelmesen nézze végig.','Indít',()=>advance('video'));break;
+    case 'video':tutorial();break;
+    case 'practice-intro':scene('Most egy gyakorlás következik. Ne feledje, használhatja a segítő kérdéseket, M.I.M.O. fejére kattintva.','Lássuk M.I.M.O.-t!',()=>advance('practice'));break;
+    case 'practice':renderTrial(true);break;
+    case 'start-experiment':scene('Vége a gyakorlásnak! Innen kezdődik a kísérlet. Ez körülbelül 20–30 percet vehet igénybe. A beküldött válaszokat mentjük, és ugyanazzal a Neptun-kóddal később is folytathatja.','Indít',()=>advance('experiment'));break;
+    default:renderTrial(false);
   }
-  network.textContent = 'Minden beküldött válasz mentve.';
 }
-function renderTrial() {
-  if (state.done) {
-    app.innerHTML = `<section class="panel completion"><img class="mimo" src="./assets/mimo-frontal.png" alt="M.I.M.O."><h1>Köszönjük a részvételt!</h1><p>Mind a 10 fogalom magyarázatát sikeresen elmentettük.</p><p class="muted">Adatfelvétel: ${escape(state.studyName)}<br>Azonosító: ${escape(state.sessionId)}</p></section>`; return;
+function tutorial(){
+  view('scene');app.innerHTML='<section class="scene-screen"><div class="video-content"><video id="tutorial-video" controls playsinline preload="metadata" src="./assets/tutorial_video.mp4" aria-label="A feladat bemutatása"></video><p class="video-note">Kérjük, nézze végig a bemutatót.</p><p class="error" role="alert"></p><button id="retry-video" hidden>Videó újratöltése</button></div></section>';
+  const video=document.querySelector('video');video.onended=()=>action(()=>advance('practice-intro'));
+  video.onerror=()=>{message(new Error('A videó nem tölthető be. Kérjük, próbálja újra.'));document.querySelector('#retry-video').hidden=false;};
+  document.querySelector('#retry-video').onclick=()=>{video.load();video.play().catch(()=>{});};video.play().catch(()=>{});
+}
+window.addEventListener('message',event=>{
+  if(event.origin!==location.origin)return;
+  const consent=document.querySelector('#consent-frame'), form=document.querySelector('#demography-frame');
+  if(consent&&event.source===consent.contentWindow&&event.data?.type==='adult-consent-accepted'){
+    consented=true;demographicIntro();return;
   }
-  const current = state.current;
-  const trialKey = practicing ? 'practice' : current.id;
-  const name = practicing ? (stored.gender === 'female' ? 'katica' : 'motor') : current.name;
-  const responses = practicing ? practiceFeatures : [...current.features, ...stored.queue.filter(x => x.assignmentId === current.id && !current.features.some(f => f.id === x.id))];
-  app.innerHTML = `<section class="trial">
-    <div class="trial-progress">
-      <div class="progress" role="progressbar" aria-label="Elkészült fogalmak" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${state.completed}"><div style="width:${state.completed*10}%"></div></div>
-      <span class="progress-label">${practicing ? 'Gyakorlás' : `${state.completed} / 10 fogalom`}</span>
-    </div>
-    <header class="trial-heading">
-      <div><p class="prompt">Magyarázd el nekem, mi az, hogy…</p><h1 class="concept">${escape(name)}</h1></div>
-      <button class="help-button" aria-label="M.I.M.O. segítő kérdései"><img src="./assets/mimo-icon.png" alt=""><span>Segítő kérdések</span></button>
-    </header>
-    <div class="trial-workspace">
-      <div class="composer">
-        <label class="field-label" for="feature-entry">Egy jellemző vagy magyarázat</label>
-        <textarea id="feature-entry" class="entry" maxlength="2000" placeholder="Írjon ide egy jellemzőt…"></textarea>
-        <button class="submit">Válasz beküldése</button>
-      </div>
-      <section class="response-panel" aria-labelledby="responses-title">
-        <div class="response-heading"><h2 id="responses-title">Eddigi válaszok</h2><span class="response-count">${responses.length} válasz</span></div>
-        <div class="responses" role="log" aria-label="Eddigi válaszok">${responses.length ? responses.map(f => `<p>${escape(f.text)}</p>`).join('') : '<p class="empty-responses">A beküldött jellemzők itt jelennek meg.</p>'}</div>
-      </section>
-    </div>
-    <p class="error" role="alert"></p>
-    <footer class="trial-footer">
-      <span class="trial-note">${practicing ? 'A gyakorlóválaszokat nem használjuk az adatfelvételben.' : escape(state.studyName)}</span>
-      <button class="next">${practicing ? 'Gyakorlás befejezése' : 'Fogalom befejezése'}</button>
-    </footer>
-  </section>`;
-  if (lastRenderedTrial !== trialKey) window.scrollTo({ top: 0, behavior: 'instant' });
-  lastRenderedTrial = trialKey;
-  const entry = document.querySelector('.entry');
-  entry.value = practicing ? '' : stored.draft || '';
-  entry.oninput = () => { if (!practicing) { stored.draft = entry.value; persist(); } };
-  document.querySelector('.help-button').onclick = () => help.showModal();
-  document.querySelector('.submit').onclick = () => action(async () => {
-    const value = entry.value.trim();
-    if (!value) throw new Error('Kérjük adjon meg választ a továbblépéshez.');
-    if (practicing) practiceFeatures.push({ text: value });
-    else {
-      stored.queue.push({ id: crypto.randomUUID(), assignmentId: current.id, text: value });
-      stored.draft = ''; persist(); entry.value = '';
-      renderTrial(); await flush(); state = await api('/state');
-    }
-    renderTrial(); document.querySelector('.entry').focus();
+  if(!form||event.source!==form.contentWindow)return;
+  if(event.data?.type==='demographics-height'&&Number.isFinite(event.data.height)){const height=Math.max(400,Math.min(event.data.height,10000));if(Math.abs(form.getBoundingClientRect().height-height)>1)form.style.height=height+'px';return;}
+  if(event.data?.type==='adult-demographics')action(async()=>{
+    if(!consented)throw new Error('Kérjük, előbb fogadja el a beleegyező nyilatkozatot.');
+    state=await api('/sessions',{...route,neptun,sessionId:auth.sessionId,token:auth.token,demographics:event.data.demographics,consent:true,consentVersion:study.consentVersion,flowVersion:'pavlovia-v2'},false);
+    renderStage();
   });
-  document.querySelector('.next').onclick = () => {
-    if (entry.value.trim()) { message(new Error('A beírt szöveget előbb küldje be a „Válasz beküldése” gombbal.')); return; }
-    if (!responses.length) { message(new Error('Kérjük adjon meg legalább egy választ.')); return; }
-    confirm.showModal();
-  };
-  entry.onkeydown = e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); document.querySelector('.submit').click(); } };
-}
-async function start() {
-  app.innerHTML = '<section class="panel"><h1>M.I.M.O.</h1><p>Betöltés…</p><p class="error" role="alert"></p><button id="retry">Újrapróbálás</button></section>';
-  document.querySelector('#retry').onclick = () => action(start);
-  if (!apiBase || (!apiBase.startsWith('https://') && location.hostname !== '127.0.0.1' && location.hostname !== 'localhost')) throw new Error('Az adatfelvételi szerver még nincs beállítva.');
-  if (!studyId) throw new Error('Kérjük, a kutatótól kapott adatfelvételi hivatkozással nyissa meg az oldalt.');
-  if (stored) {
-    if (stored.enrollment) { state = await api('/sessions', stored.enrollment, false); stored.gender = stored.enrollment.demographics.gender; stored.isTest = stored.enrollment.neptun.toUpperCase() === 'TESZT'; delete stored.enrollment; persist(); }
-    else {
-      try { state = await api('/state'); }
-      catch (error) {
-        if (error.status !== 401 || !stored.isTest) throw error;
-        localStorage.removeItem(key); stored = null;
-        study = await api('/join-info', { studyId, joinCode }, false); introduction(); return;
-      }
+});
+document.querySelector('#close-help').onclick=()=>help.close();
+document.querySelector('#edit').onclick=()=>{confirm.close();document.querySelector('.entry')?.focus();};
+document.querySelector('#finish').onclick=()=>action(async()=>{
+  confirm.close();if(state.stage==='practice'){await advance('start-experiment');return;}
+  state=await api('/complete',{assignmentId:state.current.id});pendingFeature=null;network.textContent='';renderStage();
+});
+function renderTrial(practicing){
+  const current=state.current,trialKey=practicing?'practice':current.id;
+  const name=practicing?(state.gender==='female'?'katica':'motor'):current.name;
+  const responses=practicing?practiceFeatures:current.features;
+  document.body.className='trial-view';
+  app.innerHTML=`<section class="trial"><div class="trial-progress"><div class="progress" role="progressbar" aria-label="Elkészült fogalmak" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${state.completed}"><div style="width:${state.completed*10}%"></div></div><span class="progress-label">${practicing?'Gyakorlás':state.completed+' / 10 fogalom'}</span></div><header class="trial-heading"><div><p class="prompt">Magyarázd el nekem, mi az, hogy…</p><h1 class="concept">${escape(name)}</h1></div><button class="help-button" aria-label="M.I.M.O. segítő kérdései"><img src="./assets/mimo-frontal.png" alt=""><span>Segítő kérdések</span></button></header><div class="trial-workspace"><div class="composer"><label class="field-label" for="feature-entry">Egy jellemző vagy magyarázat</label><textarea id="feature-entry" class="entry" maxlength="2000" autocomplete="off" placeholder="Írjon ide egy jellemzőt…"></textarea><button class="submit">Válasz beküldése</button></div><section class="response-panel" aria-labelledby="responses-title"><div class="response-heading"><h2 id="responses-title">Eddigi válaszok</h2><span class="response-count">${responses.length} válasz</span></div><div class="responses" role="log" aria-label="Eddigi válaszok">${responses.length?responses.map(f=>`<p>${escape(f.text)}</p>`).join(''):'<p class="empty-responses">A beküldött jellemzők itt jelennek meg.</p>'}</div></section></div><p class="error" role="alert"></p><footer class="trial-footer"><span class="trial-note">${practicing?'A gyakorlóválaszokat nem használjuk az adatfelvételben.':escape(state.studyName)}</span></footer></section>`;
+  if(lastTrial!==trialKey)window.scrollTo({top:0,behavior:'instant'});lastTrial=trialKey;
+  const entry=document.querySelector('.entry');if(pendingFeature){entry.value=pendingFeature.text;entry.readOnly=true;}
+  document.querySelector('.help-button').onclick=()=>help.showModal();
+  document.querySelector('.submit').onclick=()=>action(async()=>{
+    const text=entry.value.trim();if(!text)throw new Error('Kérjük adjon meg választ a továbblépéshez.');
+    if(practicing)practiceFeatures.push({text});
+    else{
+      pendingFeature||={id:crypto.randomUUID(),assignmentId:current.id,text};entry.readOnly=true;
+      network.textContent='Válasz mentése…';await api('/features',pendingFeature);
+      if(!current.features.some(f=>f.id===pendingFeature.id))current.features.push({id:pendingFeature.id,text:pendingFeature.text});
+      pendingFeature=null;network.textContent='Minden beküldött válasz mentve.';
     }
-    await flush(); state = await api('/state'); practicing = !stored.practiceDone && !state.done && state.completed === 0; renderTrial(); return;
-  }
-  study = await api('/join-info', { studyId, joinCode }, false); introduction();
+    renderTrial(practicing);confirm.showModal();
+  });
+  entry.onkeydown=e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();document.querySelector('.submit').click();}};
 }
-window.addEventListener('online', () => { if (stored && state) action(async () => { await flush(); state = await api('/state'); renderTrial(); }); });
-window.addEventListener('offline', () => { network.textContent = 'Nincs internetkapcsolat. A nem mentett válaszokat ezen a böngészőn tároljuk.'; });
+async function start(){
+  opening++;busy=false;confirm.close();help.close();const previousVideo=document.querySelector('video');if(previousVideo){previousVideo.onended=null;previousVideo.pause();}
+  auth=null;state=null;neptun='';consented=false;practiceFeatures=[];pendingFeature=null;lastTrial=null;
+  view('entry');app.innerHTML='<section class="panel"><p>Betöltés…</p><p class="error" role="alert"></p><button id="retry">Újrapróbálás</button></section>';
+  document.querySelector('#retry').onclick=()=>start().catch(message);
+  if(!apiBase||(!apiBase.startsWith('https://')&&!['localhost','127.0.0.1'].includes(location.hostname)))throw new Error('Az adatfelvételi szerver még nincs beállítva.');
+  study=await api('/entry-info',route,false);neptunScreen();
+}
+window.addEventListener('pageshow',e=>{if(e.persisted)start().catch(message);});
+window.addEventListener('offline',()=>{network.textContent='Nincs internetkapcsolat. A még nem visszaigazolt választ ne zárja be; a mentéshez próbálja újra a beküldést.';});
 start().catch(message);

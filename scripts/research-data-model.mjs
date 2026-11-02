@@ -35,7 +35,7 @@ export function readExclusions(text, concepts) {
   return rules;
 }
 export const RAW_HEADERS = ['participant_id','study_id','study_name','concept_name','concept_id','itemno','assignment_id','response_id','response_content','response_saved_at_utc','concept_assigned_at_utc','concept_completed_at_utc','participant_started_at_utc','participant_completed_at_utc','concept_number','cap_exceeded','subcategory_relaxed'];
-export const DEMO_HEADERS = ['participant_id','study_id','study_name','neptun','gender','age','schooling','hungarian','sni','consent_version','participant_started_at_utc','participant_completed_at_utc','abandoned_at_utc','retained_concepts_with_responses','retained_text_entries','excluded_concepts'];
+export const DEMO_HEADERS = ['participant_id','study_id','study_name','neptun','gender','age','schooling','hungarian','sni','consent_version','participant_started_at_utc','participant_completed_at_utc','abandoned_at_utc','retained_concepts_with_responses','retained_text_entries','excluded_concepts','course'];
 
 export function makeExport(snapshot, baselineText, rules = new Map(), countMode = 'concepts') {
   if (!['zero','completed'].includes(snapshot.seedMode)) throw new Error('Unknown source baseline; export stopped');
@@ -60,7 +60,7 @@ export function makeExport(snapshot, baselineText, rules = new Map(), countMode 
     const d = typeof s.demographics === 'string' ? JSON.parse(s.demographics) : s.demographics;
     const answers = [...retained.values()].filter(x => x.session.id === s.id);
     const removed = snapshot.assignments.filter(a => a.session_id === s.id && rules.get(s.neptun.trim().toUpperCase())?.has(a.concept_id)).length;
-    return [s.id,s.study_id,studies.get(s.study_id)||'',s.neptun,d.gender,d.age,d.schooling,d.hungarian,d.sni,s.consent_version,s.created_at,s.completed_at,s.abandoned_at,answers.length,answers.reduce((n,a)=>n+a.features,0),removed];
+    return [s.id,s.study_id,studies.get(s.study_id)||'',s.neptun,d.gender,d.age,d.schooling,d.hungarian,d.sni,s.consent_version,s.created_at,s.completed_at,s.abandoned_at,answers.length,answers.reduce((n,a)=>n+a.features,0),removed,d.course||''];
   }).sort((a,b)=>String(a[0]).localeCompare(String(b[0])));
   const tallies = new Map(baseline.slice(1).map(row => [row[1], [row[0],row[1],row[2],snapshot.seedMode === 'completed' ? +row[3] : 0,snapshot.seedMode === 'completed' ? +row[4] : 0]]));
   for (const {assignment:a,session:s,features} of retained.values()) {

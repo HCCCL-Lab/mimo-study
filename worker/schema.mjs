@@ -26,6 +26,7 @@ export function initialize(sql, concepts, mode) {
     );
     CREATE INDEX IF NOT EXISTS assignment_session ON assignments(session_id);
     CREATE INDEX IF NOT EXISTS feature_assignment ON features(assignment_id);
+    CREATE TABLE IF NOT EXISTS session_progress (session_id TEXT PRIMARY KEY, stage TEXT NOT NULL);
   `);
   if (!sql.exec("SELECT value FROM metadata WHERE key='seed_mode'").toArray().length) {
     if (!['zero', 'completed'].includes(mode)) throw new Error('SEED_MODE must be zero or completed');

@@ -7,6 +7,6 @@
   "workers_dev": true,
   "durable_objects": { "bindings": [{ "name": "EXPERIMENT", "class_name": "Experiment" }] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Experiment"] }],
-  "vars": { "ALLOWED_ORIGINS": "https://hcccl-lab.github.io", "SEED_MODE": "completed" },
+  "vars": { "ALLOWED_ORIGINS": "https://hcccl-lab.github.io", "SEED_MODE": "completed", "DEFAULT_STUDY_ID": "907eec07-efc2-47a2-9aaa-d7f2eb8da7d0" },
   "observability": { "enabled": false }
 }

@@ -26,5 +26,13 @@ try {
   assert.equal(preview.counts.sessions,1);
   await call('/admin/delete-test-entries',{scope:'neptun',confirm:true,expectedSessionIds:preview.sessionIds,expectedCounts:preview.counts});
   const after=await call('/admin/export',{});assert.equal(after.features.length,10);assert.equal(after.sessions.length,1);assert.deepEqual(after.concepts,exported.concepts);
+  const flowToken='5'.repeat(64);
+  assert.equal((await call('/participants/enter',{neptun:'FRESH1',token:flowToken},'')).status,'new');
+  let flow=await call('/sessions',{sessionId:crypto.randomUUID(),token:flowToken,neptun:'FRESH1',demographics:{gender:'female',age:24,schooling:16,hungarian:'native',sni:'no',course:'kiserleti'},consent:true,consentVersion:'v1',flowVersion:'pavlovia-v2'},'');
+  assert.equal(flow.stage,'instruction');assert.equal(flow.current,null);
+  for(const stage of ['tutorial-intro','video','practice-intro','practice','start-experiment','experiment'])flow=await call('/stage',{stage},flowToken);
+  await call('/features',{id:crypto.randomUUID(),assignmentId:flow.current.id,text:'Saved before new opening'},flowToken);
+  const freshOpening=await call('/participants/enter',{neptun:'fresh1',token:'6'.repeat(64)},'');
+  assert.equal(freshOpening.status,'resume');assert.equal(freshOpening.state.current.id,flow.current.id);assert.equal(freshOpening.state.current.features.length,1);
   console.log('Cloudflare runtime QA passed: 10 concepts, duplicate saves, export, and exact TESZT cleanup with counter restoration.');
 } finally {await mf.dispose();}

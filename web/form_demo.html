@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://moryscarter.com/vespr/formtohtml.php -->
+<html lang="hu"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+
+<title>Demográfia</title><link rel="stylesheet" href="./form-demo.css"></head>
+<body id="bodyForm">
+	
+	<form autocomplete="off" name="form1">  <table>
+  
+<tbody><tr><th valign="top" colspan="2" class="heading">Demográfia</th></tr>
+     
+<tr><td valign="top" colspan="2" class="description">Köszönjük, hogy részt vesz kutatásunkban! Kérem válaszoljon a lenti kérdésekre:</td></tr>
+     </tbody></table>
+<table>
+<tbody><tr><td><label for="age">Életkor</label></td><td><input id="age" name="age" type="number" required min="18" max="110"></td></tr>
+<tr><td><label for="gender">Nem</label></td><td><select id="gender" name="gender" required><option value="">Válasszon…</option><option value="female">Nő</option><option value="male">Férfi</option><option value="other">Egyéb</option><option value="undisclosed">Nem kívánok válaszolni</option></select></td></tr><tr><td valign="top" class="textItem">Hány évet töltött oktatásban [általános iskolától ezidáig]?</td><td colspan="2"><blockquote><input type="text" name="Qschooling" class="textResponse" required=""></blockquote></td></tr>
+<tr><td valign="top" class="radioItem" width="30%">Magyar az anyanyelve?</td><td class="radioResponse"><input type="radio" name="Qhungarian" value="1" required=""> Igen - az első nyelvem <br><input type="radio" name="Qhungarian" value="2" required="">  Nem - második nyelvem <br><input type="radio" name="Qhungarian" value="3" required="">  Nem <br></td></tr>
+<tr><td valign="top" class="radioItem" width="30%">Rendelkezett valaha SNI státusszal?</td><td class="radioResponse"><input type="radio" name="Qsni" value="1" required=""> Igen <br><input type="radio" name="Qsni" value="2" required="">  Nem <br></td></tr>
+<tr><td valign="top" class="textItem">Ha kurzus keretében vesz részt, kérem adja meg a kurzus nevét.</td><td colspan="2" class="radioResponse">
+  <input type="radio" name="Qkurzus" value="fejlodes1" id="kurzus_fejlodes"> <label for="kurzus_fejlodes">Fejlődés 1 előadás</label><br>
+  <input type="radio" name="Qkurzus" value="kiserleti" id="kurzus_kiserleti"> <label for="kurzus_kiserleti">Pszichológiai kísérletben és tudományos aktivitásban való részvétel</label>
+</td></tr>
+
+				<td>&nbsp;</td><td><input type="submit" name="Beküldés" value="Beküldés" class="button"></td>
+			</tr>
+
+ </tbody></table>
+
+</form><p id="form-error" role="alert"></p><script type="module" src="./form-demo.js"></script></body></html>

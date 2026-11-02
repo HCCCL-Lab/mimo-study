@@ -112,3 +112,64 @@ test('TESZT cleanup requires admin and matching backup, restores counters, and p
   assert.equal((await call('/admin/delete-test-entries',{scope:'study'})).status,400);
   db.close();
 });
+
+test('Neptun-first flow resumes by code with a new token, persists onboarding and blocks finished attempts',async()=>{
+  const {call,worker,db}=fixture();
+  const study=(await call('/admin/studies',{name:'New flow',consentUrl:'https://example.test/consent',consentVersion:'v2'})).body;
+  const route={studyId:study.id,joinCode:study.joinCode};
+  const info=await call('/entry-info',route,'');assert.equal(info.status,200);assert.equal(info.body.name,'New flow');
+  const token='e'.repeat(64),code='FLOW01';
+  assert.equal((await call('/participants/enter',{...route,neptun:code,token},'')).body.status,'new');
+  assert.equal(worker.one('SELECT COUNT(*) AS n FROM sessions').n,0);
+  let result=await call('/sessions',{...route,sessionId:crypto.randomUUID(),token,neptun:code,demographics:{gender:'male',age:23,schooling:15,hungarian:'native',sni:'no',course:'fejlodes1'},consent:true,consentVersion:'v2',flowVersion:'pavlovia-v2'},'');
+  assert.equal(result.status,201);assert.equal(result.body.stage,'instruction');assert.equal(result.body.current,null);
+  assert.equal(JSON.parse(worker.one('SELECT demographics FROM sessions').demographics).course,'fejlodes1');
+  assert.equal((await call('/stage',{stage:'experiment'},token)).status,409);
+  for(const stage of ['tutorial-intro','video'])assert.equal((await call('/stage',{stage},token)).status,200);
+  const resumedToken='f'.repeat(64);
+  const resumed=await call('/participants/enter',{...route,neptun:code.toLowerCase(),token:resumedToken},'');
+  assert.equal(resumed.body.status,'resume');assert.equal(resumed.body.state.stage,'video');
+  assert.equal((await call('/state',{},token)).status,401);
+  for(const stage of ['practice-intro','practice','start-experiment','experiment']){
+    result=await call('/stage',{stage},resumedToken);assert.equal(result.status,200);
+  }
+  let state=result.body;
+  const firstId=state.current.id;
+  const feature={id:crypto.randomUUID(),assignmentId:firstId,text:'Saved before closing the tab'};
+  await call('/features',feature,resumedToken);
+  const thirdToken='1'.repeat(64);
+  const researchResume=(await call('/participants/enter',{...route,neptun:code,token:thirdToken},'')).body;
+  assert.equal(researchResume.state.current.id,firstId);assert.equal(researchResume.state.current.features[0].text,feature.text);
+  state=researchResume.state;
+  for(let i=0;i<10;i++){
+    if(i)await call('/features',{id:crypto.randomUUID(),assignmentId:state.current.id,text:'Another saved concept'},thirdToken);
+    state=(await call('/complete',{assignmentId:state.current.id},thirdToken)).body;
+  }
+  assert.equal(state.done,true);
+  const completed=(await call('/participants/enter',{...route,neptun:code,token:'2'.repeat(64)},'')).body;
+  assert.deepEqual(completed,{status:'completed',message:'Te már résztvettél ebben a kísérletben. Nagyon köszönjük a segítséget!'});
+  db.close();
+});
+
+test('public entry uses the active study, and Neptun completion applies across named studies',async()=>{
+  const {call,worker,db}=fixture();const person=await enroll(call);
+  const other=(await call('/admin/studies',{name:'Public seminar',consentUrl:'https://example.test/doc',consentVersion:'v1'})).body;
+  assert.equal((await call('/entry-info',{},'')).body.id,other.id);
+  const resumed=(await call('/participants/enter',{neptun:'abc123',token:'3'.repeat(64)},'')).body;
+  assert.equal(resumed.status,'resume');assert.equal(resumed.state.sessionId,person.state.sessionId);
+  worker.sql.exec('UPDATE sessions SET completed_at=? WHERE id=?',new Date().toISOString(),person.state.sessionId);
+  assert.equal((await call('/participants/enter',{neptun:'ABC123',token:'4'.repeat(64)},'')).body.status,'completed');
+  assert.equal((await call('/participants/enter',{neptun:'BAD',token:'4'.repeat(64)},'')).status,400);
+  db.close();
+});
+
+test('test cleanup removes an unfinished onboarding record and its progress without changing baseline counts',async()=>{
+  const {call,worker,db}=fixture();const before=worker.rows('SELECT * FROM concepts');
+  const study=(await call('/admin/studies',{name:'Onboarding test',consentUrl:'https://example.test/doc',consentVersion:'v1'})).body;
+  await call('/sessions',{studyId:study.id,joinCode:study.joinCode,neptun:'teszt',token:'7'.repeat(64),sessionId:crypto.randomUUID(),demographics:{gender:'female',age:24,schooling:16,hungarian:'native',sni:'no'},consent:true,consentVersion:'v1',flowVersion:'pavlovia-v2'},'');
+  assert.equal(worker.one('SELECT COUNT(*) AS n FROM session_progress').n,1);
+  const preview=(await call('/admin/delete-test-entries')).body;
+  assert.deepEqual(preview.counts,{sessions:1,assignments:0,features:0,completed:0});
+  await call('/admin/delete-test-entries',{confirm:true,expectedSessionIds:preview.sessionIds,expectedCounts:preview.counts});
+  assert.equal(worker.one('SELECT COUNT(*) AS n FROM session_progress').n,0);assert.deepEqual(worker.rows('SELECT * FROM concepts'),before);db.close();
+});

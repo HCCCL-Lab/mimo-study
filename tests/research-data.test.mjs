@@ -29,7 +29,7 @@ test('full and concept exclusions update raw, demographics and tally consistentl
   const rules=readExclusions('\ufeffneptun;concept_id\r\n001abc;b13\r\nDEF456;FULL\r\n',source.concepts);
   const model=makeExport(source,baseline,rules);
   assert.equal(model.raw.length,1);assert.equal(model.raw[0][7],'r3');
-  assert.equal(model.demographics.length,1);assert.deepEqual(model.demographics[0].slice(13),[1,1,1]);
+  assert.equal(model.demographics.length,1);assert.deepEqual(model.demographics[0].slice(13),[1,1,1,'']);
   assert.deepEqual(model.tally[1],['agy','b13','bodypart',6,22]);assert.deepEqual(model.tally[2],['alma','f12','food',2,15]);
   assert.equal(source.features.length,4);
 });
