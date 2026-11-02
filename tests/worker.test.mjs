@@ -84,3 +84,31 @@ test('CORS rejects unauthorized origin before forwarding; preflight does not wri
   const r=await entry.fetch(new Request('https://api.test/state',{method:'OPTIONS',headers:{Origin:'https://hcccl-lab.github.io'}}),env);
   assert.equal(r.status,204);assert.equal(r.headers.get('Access-Control-Allow-Origin'),'https://hcccl-lab.github.io');
 });
+
+test('TESZT cleanup requires admin and matching backup, restores counters, and preserves real participants',async()=>{
+  const {call,worker,db}=fixture();
+  const before=worker.rows('SELECT * FROM concepts');
+  const testSession=await enroll(call,'female','teszt');
+  const first=testSession.state.current;
+  await call('/features',{id:crypto.randomUUID(),assignmentId:first.id,text:'Test response'},testSession.token);
+  const advanced=(await call('/complete',{assignmentId:first.id},testSession.token)).body;
+  await call('/features',{id:crypto.randomUUID(),assignmentId:advanced.current.id,text:'Unfinished test response'},testSession.token);
+  const real=await call('/sessions',{...testSession.enrollment,sessionId:crypto.randomUUID(),token:'b'.repeat(64),neptun:'TESZT1'},'');
+  assert.equal(real.status,201);
+  worker.sql.exec("UPDATE studies SET name='teszt' WHERE id=?",testSession.study.id);
+  assert.equal((await call('/admin/delete-test-entries',{},testSession.token)).status,401);
+  const preview=(await call('/admin/delete-test-entries')).body;
+  assert.deepEqual(preview.counts,{sessions:1,assignments:2,features:2,completed:1});
+  assert.equal((await call('/admin/delete-test-entries',{confirm:true})).status,409);
+  assert.equal(worker.one('SELECT COUNT(*) AS n FROM features').n,2);
+  const deleted=await call('/admin/delete-test-entries',{confirm:true,expectedSessionIds:preview.sessionIds,expectedCounts:preview.counts});
+  assert.equal(deleted.status,200);assert.equal(deleted.body.deleted,true);
+  assert.equal(worker.one('SELECT COUNT(*) AS n FROM features').n,0);
+  assert.equal(worker.one('SELECT COUNT(*) AS n FROM sessions').n,1);
+  assert.equal((await call('/state',{},testSession.token)).status,401);
+  assert.equal((await call('/state',{},'b'.repeat(64))).status,200);
+  assert.deepEqual(worker.rows('SELECT * FROM concepts'),before);
+  assert.equal((await call('/sessions',{...testSession.enrollment,sessionId:crypto.randomUUID(),token:'c'.repeat(64)},'')).status,201);
+  assert.equal((await call('/admin/delete-test-entries',{scope:'study'})).status,400);
+  db.close();
+});

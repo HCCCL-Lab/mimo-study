@@ -92,7 +92,7 @@ export class Experiment {
           !Number.isInteger(d.age) || d.age < 18 || d.age > 110 ||
           !Number.isInteger(d.schooling) || d.schooling < 0 || d.schooling > 50 ||
           !['native', 'second', 'no'].includes(d.hungarian) || !['yes', 'no'].includes(d.sni) ||
-          !text(body.neptun, 6, 6) || !/^[A-Z0-9]{6}$/i.test(body.neptun) ||
+          !text(body.neptun, 5, 6) || !/^(?:[A-Z0-9]{6}|TESZT)$/i.test(body.neptun) ||
           body.consent !== true || body.consentVersion !== study.consent_version) fail('Please check demographics and consent');
         if (!uuid(body.sessionId) || !/^[0-9a-f]{64}$/.test(body.token || '')) fail('Invalid session credentials');
         const tokenHash = await hash(body.token);
@@ -144,6 +144,27 @@ export class Experiment {
     } catch (e) { return json({ error: e.status ? e.message : 'Internal server error' }, e.status || 500); }
   }
   async admin(path, body) {
+    if (path === '/admin/delete-test-entries') {
+      const scope = 'neptun';
+      if (body.scope && body.scope !== scope) fail('Only Neptun-code test cleanup is supported');
+      return this.ctx.storage.transactionSync(() => {
+        const condition = "LOWER(TRIM(s.neptun))='teszt'";
+        const targets = `SELECT s.id FROM sessions s JOIN studies t ON t.id=s.study_id WHERE ${condition}`;
+        const ids = this.rows(targets).map(x => x.id).sort();
+        const assignments = this.one(`SELECT COUNT(*) AS n FROM assignments WHERE session_id IN (${targets})`).n;
+        const features = this.one(`SELECT COUNT(*) AS n FROM features WHERE assignment_id IN (SELECT id FROM assignments WHERE session_id IN (${targets}))`).n;
+        const completed = this.one(`SELECT COUNT(*) AS n FROM assignments WHERE completed_at IS NOT NULL AND session_id IN (${targets})`).n;
+        const counts = { sessions: ids.length, assignments, features, completed };
+        if (body.confirm !== true) return json({ scope, counts, sessionIds: ids, deleted: false });
+        if (JSON.stringify(body.expectedSessionIds) !== JSON.stringify(ids) || JSON.stringify(body.expectedCounts) !== JSON.stringify(counts)) fail('Test records changed since the backup. Run the script again.', 409);
+        const changes = this.rows(`SELECT a.concept_id,COUNT(*) AS total,SUM(CASE WHEN s.gender='male' THEN 1 ELSE 0 END) AS male,SUM(CASE WHEN s.gender='female' THEN 1 ELSE 0 END) AS female FROM assignments a JOIN sessions s ON s.id=a.session_id WHERE a.completed_at IS NOT NULL AND s.id IN (${targets}) GROUP BY a.concept_id`);
+        for (const c of changes) this.sql.exec('UPDATE concepts SET total=total-?,male=male-?,female=female-? WHERE id=?', c.total, c.male, c.female, c.concept_id);
+        this.sql.exec(`DELETE FROM features WHERE assignment_id IN (SELECT id FROM assignments WHERE session_id IN (${targets}))`);
+        this.sql.exec(`DELETE FROM assignments WHERE session_id IN (${targets})`);
+        this.sql.exec(`DELETE FROM sessions WHERE id IN (${targets})`);
+        return json({ scope, counts, deleted: true });
+      });
+    }
     if (path === '/admin/studies') {
       if (!text(body.name, 1, 120) || !text(body.consentVersion, 1, 80)) fail('Name and consent version are required');
       let url; try { url = new URL(body.consentUrl); } catch { fail('Consent URL is required'); }
@@ -169,6 +190,7 @@ export class Experiment {
     });
     if (path === '/admin/export') return json({
       exportedAt: now(), seedMode: this.one("SELECT value FROM metadata WHERE key='seed_mode'").value,
+      studies: this.rows('SELECT id,name,active FROM studies'),
       sessions: this.rows('SELECT id,study_id,neptun,demographics,consent_version,created_at,completed_at,abandoned_at FROM sessions'),
       assignments: this.rows('SELECT a.*,c.name FROM assignments a JOIN concepts c ON c.id=a.concept_id'),
       features: this.rows('SELECT * FROM features'), concepts: this.rows('SELECT * FROM concepts')

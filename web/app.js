@@ -22,7 +22,7 @@ async function api(path, body = {}, authenticated = true) {
     const result = await fetch(`${apiBase}${path}`, { method: 'POST', signal: controller.signal,
       headers: { 'Content-Type': 'application/json', ...(authenticated && stored ? { Authorization: `Bearer ${stored.token}` } : {}) }, body: JSON.stringify(body) });
     const data = await result.json();
-    if (!result.ok) throw new Error(data.error || 'A mentés nem sikerült. Próbálja újra.');
+    if (!result.ok) throw Object.assign(new Error(data.error || 'A mentés nem sikerült. Próbálja újra.'), { status: result.status });
     return data;
   } catch (e) {
     if (e instanceof TypeError || e.name === 'AbortError') throw new Error('Nem érhető el a szerver. A válasz ezen az eszközön megmaradt; csatlakozás után próbálja újra.');
@@ -50,7 +50,7 @@ function introduction() {
   document.querySelector('#begin').onclick = demographics;
 }
 function demographics() {
-  app.innerHTML = `<section class="panel"><h1>Demográfia</h1><p>Köszönjük, hogy részt vesz kutatásunkban! Kérjük, válaszoljon a lenti kérdésekre.</p><form id="demographics"><label>Neptun-kód<input name="neptun" required minlength="6" maxlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off" autocapitalize="characters"></label><div class="two-col"><label>Életkor<input name="age" type="number" required min="18" max="110"></label><label>Nem<select name="gender" required><option value="">Válasszon…</option><option value="female">Nő</option><option value="male">Férfi</option><option value="other">Egyéb</option><option value="undisclosed">Nem kívánok válaszolni</option></select></label></div><label>Hány évet töltött oktatásban (általános iskolától ezidáig)?<input name="schooling" type="number" min="0" max="50" required></label><label>Magyar anyanyelvű?<select name="hungarian" required><option value="">Válasszon…</option><option value="native">Igen – az első nyelvem</option><option value="second">Nem – második nyelvem</option><option value="no">Nem</option></select></label><label>Rendelkezik-e SNI diagnózissal?<select name="sni" required><option value="">Válasszon…</option><option value="yes">Igen</option><option value="no">Nem</option></select></label><p><a href="${escape(study.consentUrl)}" target="_blank" rel="noopener noreferrer">Kutatási tájékoztató, adatkezelés és beleegyező nyilatkozat</a></p><label class="check"><input name="consent" type="checkbox" required>Elolvastam a tájékoztatót, betöltöttem a 18. életévemet, és önként hozzájárulok a részvételhez.</label><button type="submit">Gyakorlás indítása</button><p class="error" role="alert"></p></form></section>`;
+  app.innerHTML = `<section class="panel"><h1>Demográfia</h1><p>Köszönjük, hogy részt vesz kutatásunkban! Kérjük, válaszoljon a lenti kérdésekre.</p><form id="demographics"><label>Neptun-kód<input name="neptun" required minlength="5" maxlength="6" pattern="(?:[A-Za-z0-9]{6}|[Tt][Ee][Ss][Zz][Tt])" autocomplete="off" autocapitalize="characters"></label><div class="two-col"><label>Életkor<input name="age" type="number" required min="18" max="110"></label><label>Nem<select name="gender" required><option value="">Válasszon…</option><option value="female">Nő</option><option value="male">Férfi</option><option value="other">Egyéb</option><option value="undisclosed">Nem kívánok válaszolni</option></select></label></div><label>Hány évet töltött oktatásban (általános iskolától ezidáig)?<input name="schooling" type="number" min="0" max="50" required></label><label>Magyar anyanyelvű?<select name="hungarian" required><option value="">Válasszon…</option><option value="native">Igen – az első nyelvem</option><option value="second">Nem – második nyelvem</option><option value="no">Nem</option></select></label><label>Rendelkezik-e SNI diagnózissal?<select name="sni" required><option value="">Válasszon…</option><option value="yes">Igen</option><option value="no">Nem</option></select></label><p><a href="${escape(study.consentUrl)}" target="_blank" rel="noopener noreferrer">Kutatási tájékoztató, adatkezelés és beleegyező nyilatkozat</a></p><label class="check"><input name="consent" type="checkbox" required>Elolvastam a tájékoztatót, betöltöttem a 18. életévemet, és önként hozzájárulok a részvételhez.</label><button type="submit">Gyakorlás indítása</button><p class="error" role="alert"></p></form></section>`;
   document.querySelector('form').onsubmit = e => { e.preventDefault(); action(async () => {
     const d = Object.fromEntries(new FormData(e.target));
     if (!stored) {
@@ -61,7 +61,7 @@ function demographics() {
       neptun: d.neptun.toUpperCase(), demographics: { gender: d.gender, age: +d.age, schooling: +d.schooling, hungarian: d.hungarian, sni: d.sni }, consent: true, consentVersion: study.consentVersion };
     persist();
     state = await api('/sessions', stored.enrollment, false);
-    stored.gender = d.gender; delete stored.enrollment; persist(); practicing = true; renderTrial();
+    stored.gender = d.gender; stored.isTest = d.neptun.toUpperCase() === 'TESZT'; delete stored.enrollment; persist(); practicing = true; renderTrial();
   }); };
 }
 async function flush() {
@@ -138,8 +138,15 @@ async function start() {
   if (!apiBase || (!apiBase.startsWith('https://') && location.hostname !== '127.0.0.1' && location.hostname !== 'localhost')) throw new Error('Az adatfelvételi szerver még nincs beállítva.');
   if (!studyId) throw new Error('Kérjük, a kutatótól kapott adatfelvételi hivatkozással nyissa meg az oldalt.');
   if (stored) {
-    if (stored.enrollment) { state = await api('/sessions', stored.enrollment, false); stored.gender = stored.enrollment.demographics.gender; delete stored.enrollment; persist(); }
-    else state = await api('/state');
+    if (stored.enrollment) { state = await api('/sessions', stored.enrollment, false); stored.gender = stored.enrollment.demographics.gender; stored.isTest = stored.enrollment.neptun.toUpperCase() === 'TESZT'; delete stored.enrollment; persist(); }
+    else {
+      try { state = await api('/state'); }
+      catch (error) {
+        if (error.status !== 401 || !stored.isTest) throw error;
+        localStorage.removeItem(key); stored = null;
+        study = await api('/join-info', { studyId, joinCode }, false); introduction(); return;
+      }
+    }
     await flush(); state = await api('/state'); practicing = !stored.practiceDone && !state.done && state.completed === 0; renderTrial(); return;
   }
   study = await api('/join-info', { studyId, joinCode }, false); introduction();

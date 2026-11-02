@@ -92,6 +92,32 @@ Closing a study stops new enrollment; enrolled participants can finish. Same-bro
 
 ## Exports and study materials
 
+### Double-click research tools on Windows
+
+Run these three batch files from File Explorer. They locate this project automatically, read the admin credential from ignored `.dev.vars`, and leave the window open to show the result.
+
+1. **`01-delete-teszt.bat`** removes participant records whose Neptun code is exactly `teszt` (case-insensitive), including saved responses and assignments. It first saves a full database backup under `data/<Budapest timestamp>_before-teszt-cleanup/`, then atomically reverses their completed-concept counts and deletes their records. It does not match longer codes such as `TESZT1` or studies named `teszt`. Studies and their links remain usable. If records change while being backed up, deletion stops. This launcher changes the live database; it is not run automatically. The app accepts the special five-character code `teszt` and lets its browser session restart after cleanup and refresh. All other Neptun codes still require six alphanumeric characters.
+2. **`02-download-data.bat`** downloads a fresh database snapshot and creates `data/<Budapest timestamp>_export/`. It applies the current exclusions CSV every time. The folder contains `responses.xlsx`, `demographics.xlsx`, and `YYYY-MM-DD_completed_items.csv`, plus a manifest and an `audit/` subfolder for the original source snapshot, copied exclusion rules and export intermediates. Output folders never overwrite earlier runs.
+3. **`03-apply-exclusions.bat`** reads `data/exclusions.csv` and regenerates the newest successfully downloaded snapshot into a new `data/<Budapest timestamp>_filtered/` folder. It needs no internet connection. It never deletes live records or alters earlier snapshots. Run script 2 again when you need more recent server data.
+
+Edit the ignored `data/exclusions.csv` in Excel or a text editor, preserving this header:
+
+```csv
+neptun,concept_id
+ABC123,cat_02_b13
+DEF456,full
+```
+
+The example identifiers above are illustrative; the actual template starts empty. Short concept IDs such as `b13` also work. Codes and `full` are case-insensitive. Comma or semicolon separated CSV, quoted fields, and a UTF-8 BOM are supported. `full` removes the participant from both Excel files and from new tally increments across every study. A concept exclusion removes that participant's text entries for that concept and updates the retained counts in the demographics workbook. Other demographics remain available. Source JSON snapshots deliberately retain the original data for reproducibility and are not filtered sharing copies.
+
+The raw workbook contains one row per submitted text entry, with participant/study identifiers, concept name and ID, response ID/content, assignment ID, flags, and typed timestamps. The demographics workbook links by the same participant identifier and includes Neptun codes, gender, age, education, language, SNI response, consent version, timestamps and retained response counts. Times are UTC in the workbook, marked `_utc`; output dates and folder names use Europe/Budapest. Neptun codes are text so leading zeros are preserved. The raw workbook has no Neptun column.
+
+The tally preserves the original CSV's exact five-column header and concept order: `item,itemno,category,férfi,nő`. It starts with the imported historical baseline and adds **one count per participant-session and concept with at least one saved text entry**, including unfinished concepts. Several features for the same concept count once. Exclusions affect only identified app records: the historic CSV is aggregated and contains no Neptun codes, so individual historic responses cannot be subtracted. Other/undisclosed gender records remain in Excel and are listed in the manifest because the legacy male/female CSV has no column for them.
+
+All dated data folders and `data/exclusions.csv` are ignored by Git. Only the non-sensitive concept metadata and tally baseline are allowed under tracked `data/`. Existing exports remain historical snapshots after test cleanup; run script 2 to produce fresh files without the deleted entries.
+
+The Excel writer uses the bundled Codex spreadsheet runtime at `%USERPROFILE%\.cache\codex-runtimes\codex-primary-runtime\dependencies\node`. It is already available on this machine. If the runtime moves, set the absolute `node` executable and `modules` directory in ignored `export/runtime.json`. The CLI validates the runtime before downloading. No credential is embedded in a batch file or workbook.
+
 `export/download.mjs` is a deliberately **gitignored local script**. It downloads a dated exact JSON export, response CSV, participant CSV, concept counts, and a SHA-256 checksum. Run `node export/download.mjs` after data collection. Read `export/README.md` for details. The tracked admin CLI also supports `export --output export/database.json` if the local folder needs rebuilding. These are logical exports; Cloudflare's point-in-time recovery is the additional database recovery mechanism.
 
 The response dataset includes concept/assignment IDs, ordinal, category, subcategory, cap/subcategory exceptions, assignment/completion times, and every submitted text entry's server save time. Participant exports include study, Neptun, demographics, consent version and session timestamps. Partial text responses are retained even when a concept or session is unfinished; these do not increment completed-concept counts.

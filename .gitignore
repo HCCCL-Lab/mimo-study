@@ -7,6 +7,9 @@ dist/
 !.env.example
 exports/
 export/
+/data/*
+!/data/concepts.json
+!/data/tally-baseline.csv
 backups/
 private/
 secrets/

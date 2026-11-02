@@ -17,5 +17,14 @@ try {
   }
   assert.equal(state.done,true);
   const exported=await call('/admin/export',{});assert.equal(exported.features.length,10);assert.equal(exported.assignments.length,10);
-  console.log('Cloudflare runtime QA passed: actual SQLite Durable Object, 10 concepts, concurrent duplicate saves, export.');
+  const testToken='d'.repeat(64);
+  let testState=await call('/sessions',{studyId:study.id,joinCode:study.joinCode,sessionId:crypto.randomUUID(),token:testToken,neptun:'teszt',demographics:{gender:'male',age:24,schooling:16,hungarian:'native',sni:'no'},consent:true,consentVersion:'v1'},'');
+  await call('/features',{id:crypto.randomUUID(),assignmentId:testState.current.id,text:'Disposable test'},testToken);
+  testState=await call('/complete',{assignmentId:testState.current.id},testToken);
+  await call('/features',{id:crypto.randomUUID(),assignmentId:testState.current.id,text:'Unfinished test'},testToken);
+  const preview=await call('/admin/delete-test-entries',{scope:'neptun'});
+  assert.equal(preview.counts.sessions,1);
+  await call('/admin/delete-test-entries',{scope:'neptun',confirm:true,expectedSessionIds:preview.sessionIds,expectedCounts:preview.counts});
+  const after=await call('/admin/export',{});assert.equal(after.features.length,10);assert.equal(after.sessions.length,1);assert.deepEqual(after.concepts,exported.concepts);
+  console.log('Cloudflare runtime QA passed: 10 concepts, duplicate saves, export, and exact TESZT cleanup with counter restoration.');
 } finally {await mf.dispose();}
