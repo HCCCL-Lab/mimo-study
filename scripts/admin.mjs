@@ -11,8 +11,8 @@ values.api ||= 'https://mrngo-adult-api.mrngo-adult.workers.dev';
 values.site ||= 'https://hcccl-lab.github.io/mimo-study/';
 values.consent ||= 'https://hcccl-lab.github.io/mimo-study/tajekoztato.html';
 values['consent-version'] ||= values.version || 'adult-v1';
-if (!['create-study','stats','export','abandon','close-study','reset-baseline'].includes(command)) {
-  console.log('Commands: create-study, stats, export, abandon, close-study, reset-baseline. See HOWTO.md.');
+if (!['create-study','list-studies','stats','export','abandon','close-study','reset-baseline'].includes(command)) {
+  console.log('Commands: create-study, list-studies, stats, export, abandon, close-study, reset-baseline. See HOWTO.md.');
   process.exit(1);
 }
 if (command === 'create-study') {
@@ -34,7 +34,7 @@ if (values.output) {
   if (fs.existsSync(values.output)) throw new Error(`Output already exists: ${values.output}. Choose a new filename; no study was created.`);
   fs.mkdirSync(path.dirname(path.resolve(values.output)), { recursive: true });
 }
-const paths = {'create-study':'studies', stats:'stats', export:'export', abandon:'abandon','close-study':'close-study'};
+const paths = {'create-study':'studies', 'list-studies':'list-studies', stats:'stats', export:'export', abandon:'abandon','close-study':'close-study'};
 async function request(route,body) {
 const response = await fetch(`${values.api.replace(/\/$/,'')}/admin/${route}`, {
   signal:AbortSignal.timeout(60000),

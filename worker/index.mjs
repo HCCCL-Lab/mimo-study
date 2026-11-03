@@ -183,6 +183,7 @@ export class Experiment {
     } catch (e) { return json({ error: e.status ? e.message : 'Internal server error' }, e.status || 500); }
   }
   async admin(path, body) {
+    if (path === '/admin/list-studies') return json({studies:this.rows('SELECT id,name,active FROM studies ORDER BY rowid')});
     if (path === '/admin/reset-baseline') {
       return this.ctx.storage.transactionSync(() => {
         const counts = {
