@@ -9,7 +9,7 @@ const hash = async text => Array.from(new Uint8Array(await crypto.subtle.digest(
 const secret = () => Array.from(crypto.getRandomValues(new Uint8Array(32)), b => b.toString(16).padStart(2, '0')).join('');
 const uuid = value => typeof value === 'string' && /^[0-9a-f-]{36}$/i.test(value);
 const text = (value, min, max) => typeof value === 'string' && value.trim().length >= min && value.length <= max;
-const validNeptun = value => typeof value === 'string' && /^(?:[A-Z0-9]{6}|TESZT)$/i.test(value);
+const validNeptun = value => typeof value === 'string' && value.length <= 80 && /^(?:[A-Z0-9]{6}|TESZT[0-9]*)$/i.test(value);
 const ALREADY_COMPLETED = 'Te már résztvettél ebben a kísérletben. Nagyon köszönjük a segítséget!';
 const stages = ['instruction','tutorial-intro','video','practice-intro','practice','start-experiment','experiment'];
 
@@ -206,7 +206,7 @@ export class Experiment {
       const scope = 'neptun';
       if (body.scope && body.scope !== scope) fail('Only Neptun-code test cleanup is supported');
       return this.ctx.storage.transactionSync(() => {
-        const condition = "LOWER(TRIM(s.neptun))='teszt'";
+        const condition = "LOWER(SUBSTR(s.neptun,1,5))='teszt' AND SUBSTR(s.neptun,6) NOT GLOB '*[^0-9]*'";
         const targets = `SELECT s.id FROM sessions s JOIN studies t ON t.id=s.study_id WHERE ${condition}`;
         const ids = this.rows(targets).map(x => x.id).sort();
         const assignments = this.one(`SELECT COUNT(*) AS n FROM assignments WHERE session_id IN (${targets})`).n;

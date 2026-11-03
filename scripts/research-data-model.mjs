@@ -28,7 +28,7 @@ export function readExclusions(text, concepts) {
   for (const [index, row] of rows.slice(1).entries()) {
     if (row.length !== 2) throw new Error(`Exclusions line ${index + 2}: expected exactly two columns`);
     const code = row[0].trim().toUpperCase(), value = row[1].trim().toLowerCase();
-    if (!/^(?:[A-Z0-9]{6}|TESZT)$/.test(code)) throw new Error(`Exclusions line ${index + 2}: invalid Neptun code`);
+    if (code.length > 80 || !/^(?:[A-Z0-9]{6}|TESZT[0-9]*)$/.test(code)) throw new Error(`Exclusions line ${index + 2}: invalid Neptun code`);
     if (value !== 'full' && !known.has(value)) throw new Error(`Exclusions line ${index + 2}: unknown concept ID`);
     const set = rules.get(code) || new Set(); set.add(value === 'full' ? 'full' : known.get(value)); rules.set(code, set);
   }

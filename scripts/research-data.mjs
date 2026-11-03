@@ -75,9 +75,9 @@ async function main(){
   }else if(command==='delete-teszt'){
     // Preview and delete atomically; no automatic backup files are generated.
     const preview=await request('/admin/delete-test-entries',{scope:'neptun'});
-    if(!preview.counts.sessions){console.log('No exact TESZT Neptun-code entries found. Nothing deleted.');return;}
+    if(!preview.counts.sessions){console.log('No TESZT or TESZT + digits Neptun codes found. Nothing deleted.');return;}
     const result=await request('/admin/delete-test-entries',{scope:'neptun',confirm:true,expectedSessionIds:preview.sessionIds,expectedCounts:preview.counts});
-    console.log(`Deleted ${result.counts.sessions} TESZT sessions and ${result.counts.features} text entries. Completed-concept counters adjusted.\nRun 02-download-data.bat for fresh spreadsheets.`);
+    console.log(`Deleted ${result.counts.sessions} TESZT / TESZT + digits sessions and ${result.counts.features} text entries. Completed-concept counters adjusted.\nRun 02-download-data.bat for fresh spreadsheets.`);
   }else throw new Error('Use export, exclude, or delete-teszt');
 }
 main().catch(error=>{console.error('\nERROR: '+error.message);process.exitCode=1;});
