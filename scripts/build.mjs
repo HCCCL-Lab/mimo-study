@@ -2,6 +2,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 const destination = path.resolve('dist');
 fs.mkdirSync(destination, { recursive: true });
+// Do not leave removed source files in an older build.
+if (fs.realpathSync(destination) !== destination) throw new Error('Build directory must not be a symlink');
+for (const entry of fs.readdirSync(destination)) {
+  const target = path.resolve(destination, entry);
+  if (!target.startsWith(destination + path.sep)) throw new Error('Invalid build output path');
+  fs.rmSync(target, {recursive:true,force:true});
+}
 fs.cpSync('web', destination, { recursive: true });
 const apiBase = process.env.API_BASE_URL;
 if (apiBase) {

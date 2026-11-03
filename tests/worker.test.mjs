@@ -123,7 +123,7 @@ test('Neptun-first flow resumes by code with a new token, persists onboarding an
   assert.equal(worker.one('SELECT COUNT(*) AS n FROM sessions').n,0);
   let result=await call('/sessions',{...route,sessionId:crypto.randomUUID(),token,neptun:code,demographics:{gender:'male',age:23,schooling:15,hungarian:'native',sni:'no',course:'fejlodes1'},consent:true,consentVersion:'v2',flowVersion:'pavlovia-v2'},'');
   assert.equal(result.status,201);assert.equal(result.body.stage,'instruction');assert.equal(result.body.current,null);
-  assert.equal(JSON.parse(worker.one('SELECT demographics FROM sessions').demographics).course,'fejlodes1');
+  assert.equal(JSON.parse(worker.one('SELECT demographics FROM sessions').demographics).course,'New flow');
   assert.equal((await call('/stage',{stage:'experiment'},token)).status,409);
   for(const stage of ['tutorial-intro','video'])assert.equal((await call('/stage',{stage},token)).status,200);
   const resumedToken='f'.repeat(64);
@@ -151,15 +151,19 @@ test('Neptun-first flow resumes by code with a new token, persists onboarding an
   db.close();
 });
 
-test('public entry uses the active study, and Neptun completion applies across named studies',async()=>{
+test('study links are mandatory, course cannot be spoofed, and finished Neptuns remain blocked across studies',async()=>{
   const {call,worker,db}=fixture();const person=await enroll(call);
   const other=(await call('/admin/studies',{name:'Public seminar',consentUrl:'https://example.test/doc',consentVersion:'v1'})).body;
-  assert.equal((await call('/entry-info',{},'')).body.id,other.id);
-  const resumed=(await call('/participants/enter',{neptun:'abc123',token:'3'.repeat(64)},'')).body;
+  assert.equal((await call('/entry-info',{},'')).status,403);
+  const route={studyId:person.study.id,joinCode:person.study.joinCode};
+  const resumed=(await call('/participants/enter',{...route,neptun:'abc123',token:'3'.repeat(64)},'')).body;
   assert.equal(resumed.status,'resume');assert.equal(resumed.state.sessionId,person.state.sessionId);
+  assert.equal((await call('/participants/enter',{studyId:other.id,joinCode:other.joinCode,neptun:'abc123',token:'4'.repeat(64)},'')).status,409);
+  assert.equal((await call('/sessions',{...person.enrollment,studyId:undefined,joinCode:undefined,flowVersion:'pavlovia-v2'},'')).status,403);
+  assert.equal(JSON.parse(worker.one('SELECT demographics FROM sessions').demographics).course,'Lab Monday');
   worker.sql.exec('UPDATE sessions SET completed_at=? WHERE id=?',new Date().toISOString(),person.state.sessionId);
-  assert.equal((await call('/participants/enter',{neptun:'ABC123',token:'4'.repeat(64)},'')).body.status,'completed');
-  assert.equal((await call('/participants/enter',{neptun:'BAD',token:'4'.repeat(64)},'')).status,400);
+  assert.equal((await call('/participants/enter',{studyId:other.id,joinCode:other.joinCode,neptun:'ABC123',token:'4'.repeat(64)},'')).body.status,'completed');
+  assert.equal((await call('/participants/enter',{...route,neptun:'BAD',token:'4'.repeat(64)},'')).status,400);
   db.close();
 });
 

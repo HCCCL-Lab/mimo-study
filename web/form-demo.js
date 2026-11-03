@@ -16,7 +16,7 @@ form.onsubmit=e=>{
   e.preventDefault();if(!form.reportValidity())return;
   const values=Object.fromEntries(new FormData(form));
   form.querySelector('[type=submit]').disabled=true;error.textContent='';
-  parent.postMessage({type:'adult-demographics',demographics:{age:+values.age,gender:values.gender,schooling:+values.Qschooling,hungarian:({1:'native',2:'second',3:'no'})[values.Qhungarian],sni:values.Qsni==='1'?'yes':'no',course:values.Qkurzus||''}},location.origin);
+  parent.postMessage({type:'adult-demographics',demographics:{age:+values.age,gender:values.gender,schooling:+values.Qschooling,hungarian:({1:'native',2:'second',3:'no'})[values.Qhungarian],sni:values.Qsni==='1'?'yes':'no'}},location.origin);
 };
 window.addEventListener('message',e=>{
   if(e.origin!==location.origin||e.source!==parent||e.data?.type!=='demographics-error')return;

@@ -63,12 +63,15 @@ export class Experiment {
   next(session) {
     const history = this.rows('SELECT * FROM assignments WHERE session_id=? ORDER BY ordinal', session.id);
     if (history.some(x => !x.completed_at) || history.length >= 10) return;
-    const concepts = this.rows(`SELECT c.*, COUNT(a.id) AS reserved,
-      COALESCE(SUM(CASE WHEN s.gender='male' THEN 1 ELSE 0 END),0) AS male_reserved,
-      COALESCE(SUM(CASE WHEN s.gender='female' THEN 1 ELSE 0 END),0) AS female_reserved
-      FROM concepts c LEFT JOIN assignments a ON a.concept_id=c.id AND a.completed_at IS NULL
-      AND a.session_id IN (SELECT id FROM sessions WHERE abandoned_at IS NULL)
-      LEFT JOIN sessions s ON a.session_id=s.id GROUP BY c.id`);
+    // Read only open reservations; finished responses never enlarge this scan.
+    const concepts = this.rows(`SELECT c.*, COALESCE(r.reserved,0) AS reserved,
+      COALESCE(r.male_reserved,0) AS male_reserved, COALESCE(r.female_reserved,0) AS female_reserved
+      FROM concepts c LEFT JOIN (
+        SELECT a.concept_id, COUNT(*) AS reserved,
+          SUM(s.gender='male') AS male_reserved, SUM(s.gender='female') AS female_reserved
+        FROM assignments a JOIN sessions s ON s.id=a.session_id
+        WHERE a.completed_at IS NULL AND s.abandoned_at IS NULL GROUP BY a.concept_id
+      ) r ON r.concept_id=c.id`);
     const selected = assign(concepts, history, session.gender);
     if (!selected) fail('No concept available; contact the researcher', 409);
     this.sql.exec('INSERT INTO assignments VALUES (?,?,?,?,?,?,?,?,?,NULL)', crypto.randomUUID(), session.id,
@@ -87,14 +90,9 @@ export class Experiment {
         return await this.admin(path, body);
       }
       if (path === '/entry-info' || path === '/participants/enter') {
-        let study;
-        if (body.studyId) {
-          if (!text(body.studyId,1,80) || !text(body.joinCode,16,128)) fail('Érvénytelen adatfelvételi hivatkozás.',403);
-          study = this.one('SELECT * FROM studies WHERE id=? AND join_hash=?',body.studyId,await hash(body.joinCode));
-        } else {
-          study = this.env.DEFAULT_STUDY_ID ? this.one('SELECT * FROM studies WHERE id=?',this.env.DEFAULT_STUDY_ID) : this.one("SELECT * FROM studies WHERE active=1 AND LOWER(TRIM(name))!='teszt' ORDER BY rowid DESC LIMIT 1");
-        }
-        if (!study) fail('Az adatfelvétel még nincs beállítva.',403);
+        if (!text(body.studyId,1,80) || !text(body.joinCode,16,128)) fail('Kérjük, a kurzushoz kapott kísérleti hivatkozást nyissa meg.',403);
+        const study = this.one('SELECT * FROM studies WHERE id=? AND join_hash=?',body.studyId,await hash(body.joinCode));
+        if (!study) fail('Érvénytelen adatfelvételi hivatkozás.',403);
         const publicStudy = {id:study.id,name:study.name,consentUrl:study.consent_url,consentVersion:study.consent_version};
         if (path === '/entry-info') return json(publicStudy);
         if (!validNeptun(body.neptun) || !/^[0-9a-f]{64}$/.test(body.token||'')) fail('Kérjük, ellenőrizze a Neptun-kódot.');
@@ -103,6 +101,7 @@ export class Experiment {
           if (this.one('SELECT id FROM sessions WHERE neptun=? AND completed_at IS NOT NULL',code)) return json({status:'completed',message:ALREADY_COMPLETED});
           const existing = this.one('SELECT * FROM sessions WHERE neptun=? AND completed_at IS NULL AND abandoned_at IS NULL ORDER BY created_at DESC,id DESC LIMIT 1',code);
           if (existing) {
+            if (existing.study_id !== study.id) fail('A megkezdett részvétel folytatásához az eredeti kurzus hivatkozását nyissa meg.',409);
             this.sql.exec('UPDATE sessions SET token_hash=? WHERE id=?',tokenHash,existing.id);
             return json({status:'resume',state:this.state(existing)});
           }
@@ -111,10 +110,8 @@ export class Experiment {
         });
       }
       if (path === '/join-info' || path === '/sessions') {
-        const isPublicEntry = !body.studyId && path === '/sessions' && body.flowVersion === 'pavlovia-v2';
-        if (!isPublicEntry && (!text(body.studyId, 1, 80) || !text(body.joinCode, 16, 128))) fail('Invalid study link', 403);
-        const codeHash = isPublicEntry ? null : await hash(body.joinCode);
-        const study = isPublicEntry ? (this.env.DEFAULT_STUDY_ID ? this.one('SELECT * FROM studies WHERE id=? AND active=1',this.env.DEFAULT_STUDY_ID) : this.one("SELECT * FROM studies WHERE active=1 AND LOWER(TRIM(name))!='teszt' ORDER BY rowid DESC LIMIT 1")) : this.one('SELECT * FROM studies WHERE id=? AND join_hash=? AND active=1', body.studyId, codeHash);
+        if (!text(body.studyId, 1, 80) || !text(body.joinCode, 16, 128)) fail('Invalid study link', 403);
+        const study = this.one('SELECT * FROM studies WHERE id=? AND join_hash=? AND active=1', body.studyId, await hash(body.joinCode));
         if (!study) fail('The study link is invalid or closed', 403);
         if (path === '/join-info') return json({ name: study.name, consentUrl: study.consent_url, consentVersion: study.consent_version });
         const d = body.demographics;
@@ -123,11 +120,10 @@ export class Experiment {
           !Number.isInteger(d.schooling) || d.schooling < 0 || d.schooling > 50 ||
           !['native', 'second', 'no'].includes(d.hungarian) || !['yes', 'no'].includes(d.sni) ||
           !validNeptun(body.neptun) ||
-          (d.course !== undefined && !['','fejlodes1','kiserleti'].includes(d.course)) ||
           body.consent !== true || body.consentVersion !== study.consent_version) fail('Please check demographics and consent');
         if (!uuid(body.sessionId) || !/^[0-9a-f]{64}$/.test(body.token || '')) fail('Invalid session credentials');
         const tokenHash = await hash(body.token);
-        const normalized = { gender: d.gender, age: d.age, schooling: d.schooling, hungarian: d.hungarian, sni: d.sni, course: d.course || '' };
+        const normalized = { gender: d.gender, age: d.age, schooling: d.schooling, hungarian: d.hungarian, sni: d.sni, course: study.name };
         return this.ctx.storage.transactionSync(() => {
           const previous = this.one('SELECT * FROM sessions WHERE id=?', body.sessionId);
           if (previous) {

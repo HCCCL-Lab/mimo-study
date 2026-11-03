@@ -122,6 +122,9 @@ async function start(){
   view('entry');app.innerHTML='<section class="panel"><p>Betöltés…</p><p class="error" role="alert"></p><button id="retry">Újrapróbálás</button></section>';
   document.querySelector('#retry').onclick=()=>start().catch(message);
   if(!apiBase||(!apiBase.startsWith('https://')&&!['localhost','127.0.0.1'].includes(location.hostname)))throw new Error('Az adatfelvételi szerver még nincs beállítva.');
+  if(!route.studyId||!route.joinCode){
+    app.innerHTML='<section class="panel entry-panel"><h1>Fogalmak magyarázata</h1><p>Kérjük, a kurzushoz vagy adatfelvételhez kapott kísérleti hivatkozást nyissa meg.</p></section>';return;
+  }
   study=await api('/entry-info',route,false);neptunScreen();
 }
 window.addEventListener('pageshow',e=>{if(e.persisted)start().catch(message);});
