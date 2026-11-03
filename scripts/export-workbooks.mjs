@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { pathToFileURL } from 'node:url';
-const [inputFile, outputDir, runtimeDir, qaFlag] = process.argv.slice(2);
+const [inputFile, outputDir, runtimeDir] = process.argv.slice(2);
 const require = createRequire(path.resolve(runtimeDir, 'package.json'));
 const { Workbook, SpreadsheetFile } = await import(pathToFileURL(require.resolve('@oai/artifact-tool')).href);
 const model = JSON.parse(await fs.readFile(inputFile, 'utf8'));
@@ -36,12 +36,6 @@ for (const [filename, name, headers, data] of [
   if(data.length)sheet.getRange(`A2:${last}${data.length+1}`).format.autofitRows();
   sheet.freezePanes.freezeRows(1);
   book.recalculate();
-  // Verification stays in memory, without printing participant records.
-  await book.inspect({kind:'table',range:`${name}!A1:F${Math.min(rows,4)}`,include:'values',tableMaxRows:4,tableMaxCols:6,maxChars:1500});
-  if(qaFlag==='--qa'){
-    const preview=await book.render({sheetName:name,range:`${name==='Responses'?'D1:L':'A1:F'}${Math.min(rows,4)}`,scale:1,format:'png'});
-    await fs.writeFile(path.join(outputDir,name.toLowerCase()+'-preview.png'),new Uint8Array(await preview.arrayBuffer()));
-  }
   await (await SpreadsheetFile.exportXlsx(book)).save(path.join(outputDir,filename));
 }
 console.log(`Excel files written: ${model.raw.length} text entries; ${model.demographics.length} participants.`);

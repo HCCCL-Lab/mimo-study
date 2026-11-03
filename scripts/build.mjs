@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-const destination = path.resolve('dist');
+const destination = path.resolve('export/site');
 fs.mkdirSync(destination, { recursive: true });
 // Do not leave removed source files in an older build.
 if (fs.realpathSync(destination) !== destination) throw new Error('Build directory must not be a symlink');

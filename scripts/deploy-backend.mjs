@@ -17,6 +17,6 @@ const output=run(['deploy']);
 run(['secret','put','ADMIN_TOKEN'],token+'\n');
 const url=output.match(/https:\/\/[a-zA-Z0-9.-]+\.workers\.dev/)?.[0];
 if(url) {
-  fs.mkdirSync('export',{recursive:true});fs.writeFileSync('export/config.json',JSON.stringify({apiBase:url},null,2)+'\n');
-  console.log(`Backend deployed: ${url}. Local export/config.json updated; admin credential stays in ignored .dev.vars.`);
+  fs.mkdirSync('export/settings',{recursive:true});fs.writeFileSync('export/settings/config.json',JSON.stringify({apiBase:url},null,2)+'\n');
+  console.log(`Backend deployed: ${url}. Local export/settings/config.json updated; admin credential stays in ignored .dev.vars.`);
 }

@@ -183,6 +183,24 @@ export class Experiment {
     } catch (e) { return json({ error: e.status ? e.message : 'Internal server error' }, e.status || 500); }
   }
   async admin(path, body) {
+    if (path === '/admin/reset-baseline') {
+      return this.ctx.storage.transactionSync(() => {
+        const counts = {
+          sessions: this.one('SELECT COUNT(*) AS n FROM sessions').n,
+          assignments: this.one('SELECT COUNT(*) AS n FROM assignments').n,
+          features: this.one('SELECT COUNT(*) AS n FROM features').n
+        };
+        if (body.confirm !== 'RESET TO BASELINE') return json({counts,reset:false});
+        if (JSON.stringify(body.expectedCounts) !== JSON.stringify(counts)) fail('Records changed. Preview the reset again.',409);
+        this.sql.exec('DELETE FROM features');
+        this.sql.exec('DELETE FROM assignments');
+        this.sql.exec('DELETE FROM session_progress');
+        this.sql.exec('DELETE FROM sessions');
+        for (const c of corpus) this.sql.exec('UPDATE concepts SET total=?,male=?,female=? WHERE id=?',c.baseline_male+c.baseline_female,c.baseline_male,c.baseline_female,c.id);
+        this.sql.exec("UPDATE metadata SET value='completed' WHERE key='seed_mode'");
+        return json({counts,reset:true,concepts:corpus.length,studiesPreserved:true});
+      });
+    }
     if (path === '/admin/delete-test-entries') {
       const scope = 'neptun';
       if (body.scope && body.scope !== scope) fail('Only Neptun-code test cleanup is supported');
@@ -195,7 +213,7 @@ export class Experiment {
         const completed = this.one(`SELECT COUNT(*) AS n FROM assignments WHERE completed_at IS NOT NULL AND session_id IN (${targets})`).n;
         const counts = { sessions: ids.length, assignments, features, completed };
         if (body.confirm !== true) return json({ scope, counts, sessionIds: ids, deleted: false });
-        if (JSON.stringify(body.expectedSessionIds) !== JSON.stringify(ids) || JSON.stringify(body.expectedCounts) !== JSON.stringify(counts)) fail('Test records changed since the backup. Run the script again.', 409);
+        if (JSON.stringify(body.expectedSessionIds) !== JSON.stringify(ids) || JSON.stringify(body.expectedCounts) !== JSON.stringify(counts)) fail('Test records changed since the preview. Run the script again.', 409);
         const changes = this.rows(`SELECT a.concept_id,COUNT(*) AS total,SUM(CASE WHEN s.gender='male' THEN 1 ELSE 0 END) AS male,SUM(CASE WHEN s.gender='female' THEN 1 ELSE 0 END) AS female FROM assignments a JOIN sessions s ON s.id=a.session_id WHERE a.completed_at IS NOT NULL AND s.id IN (${targets}) GROUP BY a.concept_id`);
         for (const c of changes) this.sql.exec('UPDATE concepts SET total=total-?,male=male-?,female=female-? WHERE id=?', c.total, c.male, c.female, c.concept_id);
         this.sql.exec(`DELETE FROM features WHERE assignment_id IN (SELECT id FROM assignments WHERE session_id IN (${targets}))`);
